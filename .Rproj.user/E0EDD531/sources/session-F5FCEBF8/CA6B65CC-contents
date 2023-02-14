@@ -1,0 +1,501 @@
+---
+title: "Nutrition support practices- Data wrangling"
+author: "Eric Anku, Dr. Lamptey Samad, George Akafity, Sarah Amoo, Dr. Lauren Hill"
+format: html
+---
+
+```{r r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r libraries}
+pacman::p_load(
+        rio, # Import dataset
+        finalfit, # Labelling and data inspection
+        gtsummary, # Summary tables
+        tidyverse, # Data wrangling and visualisation
+        janitor, # Data cleaning
+        ggstatsplot, # Inferential plots
+        here, # Working directory
+        naniar, # Missing values
+        skimr, # Skim daataset
+        psych, # Describe dataset
+        lessR, # Multiple plots and statistical tests
+        forcats # Working with factors 
+)
+```
+
+```{r import-dataset}
+# Import dataset
+df <- import(here("data","nss.csv"))
+```
+
+
+****
+
+
+## Background to data analysis
+
+
+Data analysis was done using R version 4.1.2 for Mac. There were 26 responses in total. The survey was closed prior to nutrition presentations delivered at the ICU on nutrition in critical care.
+
+The following summary tables provide additional details. There were 24 out of 26 responses for the question, How many years have you been working in the ICU? Responses ranged from 2 days to 6 years. So, the responses were recoded to include responses less than 1 year and responses greater than 1 year which was used for the final analysis.  
+
+The years of experience of the respondents in terms of their professional qualification was grouped into less than 3 years of working experience and greater or equal to 3 years of working experience based on the median years of experience. 
+
+This current draft does not contain plots for the multiple responses as I am trying to code that as well. The plots should be done in the revised version of the analysis report. Additional plots in the draft report are visualizations of the information present in the tables.Final and more polished plots will be created after our review. 
+
+The other source of nutrition information had 2 responses. One response indicated literature and the other indicated media as the other source of information. The literature response was added to the journal articles category and the other category name was changed to media as there was only 1 response of other source of nutrition information.
+
+Doctor and pharmacist were collectively categorised as doctors and general and critical care nurses were categorised as nurses in the professional group used for the sub-group analysis.
+
+
+```{r glimpse-data}
+# Assess dataset
+glimpse(df)
+```
+
+```{r remove-first-two-columns}
+# Clean dataset
+# Remove timestamp and informed consent
+df <- df%>%
+        select(-c(
+                Timestamp,
+                `If you give consent to participate in this study, select ""I agree"" below`
+        
+        ))
+```
+
+
+```{r descriptive-column-names}
+# Descriptive names of columns in the dataset
+colnames(df) <- c(
+        "age_group", 
+        "years_working_icu", 
+        "profession", 
+        "years_experience", 
+        "nutrition_support_team", 
+        "educ_level_nurses", 
+        "nutrition_assessment", 
+        "profession_assessment", 
+        "nutrition_tools", 
+        "nutrition_requirement", 
+        "nutrition_protocol", 
+        "fluid_volume_decision", 
+        "commence_en", 
+        "commence_pn", 
+        "decide_route", 
+        "basis_en", 
+        "grv_en", 
+        "timing_en", 
+        "common_route_en", 
+        "rationale_post_pylorus", 
+        "tube_placement_en", 
+        "checking_position_en", 
+        "pattern_en", 
+        "frequency_changing_en", 
+        "feed_tolerance_en", 
+        "method_tolerance_en", 
+        "optimise_en", 
+        "freq_monitor_en", 
+        "methods_monitoring_en", 
+        "protocol_ons", 
+        "rationale_ons", 
+        "tolerance_ons", 
+        "basis_pn", 
+        "timing_pn", 
+        "rationale_pn", 
+        "vascular_access_pn", 
+        "biochem_pn", 
+        "monitoring_pn", 
+        "competence", 
+        "formal_nutr_educ", 
+        "source_info", 
+        "other_info"
+)
+```
+
+```{r function-empty-entries}
+### Empty entries to NA
+# Function to return empty entries as NA
+empty_function <- function(x){
+        replace(x, x == "", NA)
+}
+```
+
+```{r make-empty-entries-na}
+# Make all emptry entries NA
+df <- empty_function(df)
+```
+
+```{r add-labels-reformat-datatype}
+# Data manipulation
+df <- df%>%
+        mutate(
+                age_group = factor(age_group)%>%
+                        ff_label("Age group"),
+                years_working_icu_transform = years_working_icu,
+                years_experience_transform = years_experience,
+                profession = factor(profession)%>%
+                        fct_relevel(c("Nurse (General)", 
+                                      "Medical doctor (general practitioner)",
+                                      "Nurse (Critical care)",
+                                      "Pharmacist"))%>%
+                        ff_label("Professional qualification"),
+                nutrition_support_team = factor(nutrition_support_team)%>%
+                        ff_label("Does the ICU have a formal nutrition support team?"),
+                educ_level_nurses = factor(educ_level_nurses)%>%
+                        fct_relevel(c("Diploma",
+                                      "Degree",
+                                      "Masters",
+                                      "PhD"))%>%
+                        ff_label("Highest level of education (Nurses)"),
+                nutrition_assessment = factor(nutrition_assessment)%>%
+                        ff_label("Is nutrition screening or nutritional status assessment routine practice in the ICU?"),
+                profession_assessment = factor(profession_assessment)%>%
+                        ff_label("What is the profession of the person who mainly performs nutrition assessment"),
+                nutrition_tools = factor(nutrition_tools)%>%
+                        ff_label("Which nutrition screening/assessment methods or tools are used"),
+                nutrition_requirement = factor(nutrition_requirement)%>%
+                        ff_label("Usual methods for calculating nutritional requirements"),
+                nutrition_protocol = factor(nutrition_protocol)%>%
+                        ff_label("Does the ICU have a formal, written nutrition support protocol?"),
+                fluid_volume_decision = factor(fluid_volume_decision)%>%
+                        ff_label("Usual method for determining fluid volume allocated to nutrition support"),
+                commence_en = factor(commence_en)%>%
+                        ff_label("Which criteria determines whether EN is commmenced?"),
+                commence_pn = factor(commence_pn)%>%
+                        ff_label("Which criteria determines whether PN is commmenced?"),
+                decide_route = factor(decide_route)%>%
+                        ff_label("What is the profession of the person who mainly decides which route (enteral or parenteral) of nutrition support the patient should receive?"),
+                basis_en = factor(basis_en)%>%
+                        ff_label("What is the basis for enteral nutrition support decision making?"),
+                grv_en = factor(grv_en)%>%
+                        ff_label("Indicate the gastric residual volume/aspirate volumen threshold used to guide practice"),
+                timing_en = factor(timing_en)%>%
+                        ff_label("Indicate the typical timing for initiation of enteral nutrition"),
+                common_route_en = factor(common_route_en)%>%
+                        ff_label("Indicate the most commonly used route of enteral nutrition delivery"),
+                rationale_post_pylorus = factor(rationale_post_pylorus)%>%
+                        ff_label("Indicate the rationale for use of post-pyloric enteral feed delivery"),
+                tube_placement_en = factor(tube_placement_en)%>%
+                        ff_label("Indicate usial procedure for placing enteral feeding tubes"),
+                checking_position_en = factor (checking_position_en)%>%
+                        ff_label("Indicate usual procedure for checking the position of enteral feeding tubes"),
+                pattern_en = factor(pattern_en)%>%
+                        ff_label("Indicate usual pattern of enteral nutrition support delivery"),
+                frequency_changing_en = factor(frequency_changing_en)%>%
+                        ff_label("Indicate frequency of changing enteral feeding tubes"),
+                feed_tolerance_en = factor(feed_tolerance_en)%>%
+                        ff_label("Usual frequency of assessing enteral feed tolerance"),
+                method_tolerance_en = factor(method_tolerance_en)%>%
+                        ff_label("Usual method of assessing enteral feed tolerance"),
+                optimise_en = factor(optimise_en)%>%
+                        ff_label("Usual method of optimising enteral nutrition"),
+                freq_monitor_en = factor(freq_monitor_en)%>%
+                        ff_label("Usual frequency of monitoring enteral nutrition support"),
+                methods_monitoring_en = factor(methods_monitoring_en)%>%
+                        ff_label("Usual methods of monitoring enteral nutrition support"),
+                protocol_ons = factor(protocol_ons)%>%
+                        ff_label("Does the ICU have a protocol for the use of oral nutrition supplements?"),
+                rationale_ons = factor(rationale_ons)%>%
+                        ff_label("Usual rationale for use of oral nutrition supplements"),
+                tolerance_ons = factor(tolerance_ons)%>%
+                        ff_label("Frequency of assessment of tolerance and patient acceptability"),
+                basis_pn = factor(basis_pn)%>%
+                        ff_label("What is the basis for parenteral nutrition support decision making?"),
+                timing_pn = factor(timing_pn)%>%
+                        ff_label("Indicate the usual timing of parenteral nutrition support initiation"),
+                rationale_pn = factor(rationale_pn)%>%
+                        ff_label("Usual rationale for parenteral nutrition use"),
+                vascular_access_pn = factor(vascular_access_pn)%>%
+                        ff_label("Indicate most commonly used vascular access for parentral nutrition delivery"),
+                biochem_pn = factor(biochem_pn)%>%
+                        ff_label("Usual frequency of biochemical monitoring of parenteral nutrition safety and tolerance"),
+                monitoring_pn = factor(monitoring_pn)%>%
+                        ff_label("Usual methods of monitoring parenteral nutrition support"),
+                competence = factor(competence)%>%
+                        ff_label("How competent/skilled do you consider yourself in nutrition support?")%>%
+                        fct_relevel(c("Satisfactory/average- I get by unless the patient is complex", "Above average- I can manage most nutrition support with confidence",
+                                      "Below average- I am not confident in managing most in nutrition support",
+                                      "Totally unskilled- I don't have even basic knowledge of nutrition support")),
+                formal_nutr_educ = factor(formal_nutr_educ)%>%
+                        ff_label("Have you had any formal nutrition education or training?"),
+                source_info = factor(source_info)%>%
+                        ff_label("Main source of information for nutrition support")%>%
+                        fct_relevel(c("Feeding protocol", "In-service training", "Colleagues", "Journal articles", "Workshop/Conference", "Media")),
+                other_info = other_info%>%
+                        ff_label("Source of information (others)"),
+                 profession_doctor_nurse = profession%>%
+                        fct_recode(
+                                "Doctor" = "Medical doctor (general practitioner)",
+                                "Doctor" = "Pharmacist",
+                                "Nurse" = "Nurse (General)",
+                                "Nurse" = "Nurse (Critical care)"
+        )%>%
+                ff_label("Professional categories")
+        )
+```
+
+
+```{r view-digits-working-icu}
+# View strings with digits in the years working in the ICU
+str_view_all(df$years_working_icu,"\\d") 
+```
+
+```{r years-working-icu-transform}
+#### Clean years working in the ICU with the transformed variable
+# Clean years working in the ICU with the transformed variable for years working in the ICU
+df$years_working_icu_transform <- df$years_working_icu_transform%>%
+        str_replace_all(c(
+                "1year 10months" = "1",
+                "3 months" = 0,
+                "Two days" = 0,
+                "15 months" = "1",
+                "6 months" = 0,
+                "One year" = "1",
+                "Less than a year" = 0,
+                "1 year" = "1",
+                "3years" = "3",
+                "Six months" = 0,
+                "1month" = 0,
+                "2 years" = "2",
+                "1 year 3 months" = "1",
+                "1 year 9 months" = "1",
+                "1year" = "1"
+        ))
+```
+
+```{r re-clean-years-working-icu}
+# Clean years working in the ICU with the transformed variable
+df$years_working_icu_transform <- df$years_working_icu_transform%>%
+        str_replace_all(c(
+                "1 9 months" = "1",
+                "1 0" = "1"
+        ))
+```
+
+```{r replace-empty-entries-na}
+# Replace empty entries of years working in the ICU with 0
+df$years_working_icu_transform <- replace(df$years_working_icu_transform, df$years_working_icu_transform == "", 0)
+```
+
+
+```{r case-when-years-working-icu}
+# Mutate and create a new variable with years working in the ICU based on a logic statement
+df <- df%>%
+        mutate(
+                 years_working_icu_factor = case_when(
+                years_working_icu_transform < 1 ~ "< 1 year",
+                years_working_icu_transform >= 1 ~ ">= 1 year"
+        ) )
+```
+
+```{r years-working-profession-transform}
+#### Clean years working in the profession with the transformed variable
+# Clean years of experience in the profession with the transformed variable
+df$years_experience_transform <- df$years_experience_transform%>%
+        str_replace_all(c(
+                "5years" = "5",
+                "Just started" = "0",
+                "15 months" = "1",
+                "6years" = "6",
+                "3 years" = "3",
+                "One year" = "1",
+                "7 years" = "7",
+                "4years" = "4",
+                "2years" = "2",
+                "1year" = "1",
+                "2 years" = "2",
+                "2 years 3 months" = "2",
+                "4 years" = "4",
+                "2 3 months" = "2"
+        ))
+```
+
+```{r replace-empty-entries-with-0}
+# Replace empty entries of years working in the ICU with 0
+df$years_experience_transform <- replace(df$years_experience_transform, df$years_experience_transform == "", 0)
+```
+
+```{r case-when-years-professional-experience}
+# Mutate and create a new variable with years working in the ICU based on a logic statement
+df <- df%>%
+        mutate(
+                 years_experience_factor = case_when(
+                years_experience_transform < 3 ~ "< 3 years",
+                years_experience_transform >= 3 ~ ">= 3 years"
+        ) )
+```
+
+```{r convert-factor}
+# Convert datatype of years working in the ICU (transformed) and professional experience (transformed) into factors
+df <- df%>%
+        mutate(
+                years_working_icu_factor = factor(years_working_icu_factor)%>%
+                        ff_label("How many years have you been working in the ICU?"),
+                years_experience_factor = factor(years_experience_factor)%>%
+                        ff_label("Years of professional experience")
+        )
+```
+
+```{r create-multiple-tables}
+# Demographics table
+demographics <- df%>%
+        select(
+                age_group,
+                years_working_icu_factor,
+                profession,
+                years_experience_factor,
+                nutrition_support_team,
+                educ_level_nurses
+        )
+
+# Nutrition screening and assessment table
+
+nutrition_assessment <- df%>%
+        select(
+                nutrition_assessment,
+                profession_assessment,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Nutrition support decision making table
+
+decision <- df%>%select(
+        nutrition_protocol,
+        fluid_volume_decision,
+        decide_route,
+         profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+)
+
+
+# Enteral nutrition support table
+
+en <- df%>%
+        select(
+                grv_en,
+                timing_en,
+                common_route_en,
+                rationale_post_pylorus,
+                tube_placement_en,
+                checking_position_en,
+                pattern_en,
+                frequency_changing_en,
+                feed_tolerance_en,
+                optimise_en,
+                freq_monitor_en,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Oral nutrition supplements table
+
+ons <- df%>%
+        select(
+                protocol_ons,
+                tolerance_ons,
+                 profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Parenteral nutrition table
+
+pn <- df%>%
+        select(
+                basis_pn,
+                rationale_pn,
+                vascular_access_pn,
+                biochem_pn,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Skills and training table
+
+skills <- df%>%
+        select(
+                competence,
+                formal_nutr_educ,
+                source_info,
+                other_info,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Multiple choice questions- Create visualisations
+mcqs <- df%>%
+        select(
+                nutrition_tools,
+                nutrition_requirement,
+                commence_en,
+                commence_pn,
+                basis_en,
+                feed_tolerance_en,
+                methods_monitoring_en,
+                rationale_ons,
+                timing_pn,
+                monitoring_pn
+        )
+```
+
+
+```{r wrangle-skills-training}
+# Convert Others: Literature to Journal articles for source of information
+skills$source_info <- replace(skills$source_info, 7, "Journal articles")
+
+
+# Convert Others: Media to Media under source of information
+levels(skills$source_info)[levels(skills$source_info) == "Other"] <- "Media"
+
+# Remove Other source of information from dataframe (skills)
+skills <- skills%>%
+        select(
+        -c(other_info)
+)
+```
+
+```{r export-datasets}
+# full dataset
+export(df, here("data", "nss_clean.csv"))
+
+# demographics
+export(demographics, here("data", "dempgraphics.csv"))
+
+# nutrition assessment
+export(nutrition_assessment, here("data", "nutrition_assessment.csv"))
+
+# decision
+export(decision, here("data", "decision.csv"))
+
+# en
+export(en, here("data", "enteral_nutrition.csv"))
+
+# ons
+export(ons, here("data", "oral_nutrition_supplement.csv"))
+
+# pn
+export(pn, here("data", "parenteral_nutrition.csv"))
+
+# skills
+export(skills, here("data", "skills.csv"))
+
+# mcqs
+export(mcqs, here("data", "mcqs.csv"))
+```
+
+

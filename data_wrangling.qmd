@@ -475,7 +475,7 @@ skills <- skills%>%
 export(df, here("data", "nss_clean.csv"))
 
 # demographics
-export(demographics, here("data", "dempgraphics.csv"))
+export(demographics, here("data", "demographics.csv"))
 
 # nutrition assessment
 export(nutrition_assessment, here("data", "nutrition_assessment.csv"))

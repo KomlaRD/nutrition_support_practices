@@ -28,7 +28,18 @@ pacman::p_load(
 ```
 
 ```{r import-datasets}
+# Full clean dataset
+nss <- import(here("data","nss_clean.csv"))
 
+# Subset dataset
+## Demographics
+demos <- import(here("data","demographics.csv"))
+en <- import(here("data","enteral_nutrition.csv"))
+mcqs <- import(here("data","mcqs.csv"))
+assessment <- import(here("data","nutrition_assessment.csv"))
+ons <- import(here("data","oral_nutrition_supplement.csv"))
+pn <- import(here("data","parenteral_nutrition.csv"))
+skills <- import(here("data","skills.csv"))
 ```
 
 

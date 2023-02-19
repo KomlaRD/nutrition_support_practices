@@ -29,17 +29,18 @@ pacman::p_load(
 
 ```{r import-datasets}
 # Full clean dataset
-nss <- import(here("data","nss_clean.csv"))
+nss <- import(here("data","nss_clean.RData"))
 
 # Subset dataset
 ## Demographics
-demos <- import(here("data","demographics.csv"))
-en <- import(here("data","enteral_nutrition.csv"))
+demographics <- import(here("data","demographics.RData"))
+en <- import(here("data","enteral_nutrition.RData"))
 mcqs <- import(here("data","mcqs.csv"))
-assessment <- import(here("data","nutrition_assessment.csv"))
-ons <- import(here("data","oral_nutrition_supplement.csv"))
-pn <- import(here("data","parenteral_nutrition.csv"))
-skills <- import(here("data","skills.csv"))
+nutrition_assessment <- import(here("data","nutrition_assessment.RData"))
+ons <- import(here("data","oral_nutrition_supplement.RData"))
+pn <- import(here("data","parenteral_nutrition.RData"))
+skills <- import(here("data","skills.RData"))
+decision <- import(here("data","decision.RData"))
 ```
 
 
@@ -53,14 +54,17 @@ skills <- import(here("data","skills.csv"))
 
 ```{r demographics}
 demographics%>%
-        tbl_summary()%>%
+  select(-nutrition_support_team)%>%
+        tbl_summary(
+          missing="no"
+        )%>%
         modify_caption("**Characteristics of participants**")%>%
         bold_labels()
 ```
 
 
 ```{r nutrition-assessment}
-nutrition_assessment%>%
+t2 <- nutrition_assessment%>%
         select(-c(
                 years_experience_factor,
                 years_working_icu_factor,
@@ -74,7 +78,7 @@ nutrition_assessment%>%
 
 
 ```{r nutrition-decision}
-decision%>%
+t3 <- decision%>%
         select(-c(
                 years_experience_factor,
                 years_working_icu_factor,
@@ -86,8 +90,13 @@ decision%>%
         bold_labels()
 ```
 
+```{r tbl-stack-one}
+tbl_stack(list(t2, t3), group_header = c("Nutrition screening and assessment", "Nutrition support decision making"))
+```
+
+
 ```{r enteral-nutrition}
-en%>%
+t4 <- en%>%
         select(-c(
                 years_experience_factor,
                 years_working_icu_factor,
@@ -100,7 +109,7 @@ en%>%
 ```
 
 ```{r oral-nutrition}
-ons%>%select(-c(
+t5<- ons%>%select(-c(
                 years_experience_factor,
                 years_working_icu_factor,
                 educ_level_nurses,
@@ -113,7 +122,7 @@ ons%>%select(-c(
 
 
 ```{r pn}
-pn%>%select(-c(
+t6 <- pn%>%select(-c(
                 years_experience_factor,
                 years_working_icu_factor,
                 educ_level_nurses,
@@ -124,8 +133,13 @@ pn%>%select(-c(
         bold_labels()
 ```
 
+```{r tbl-stack-all-nsp}
+tbl_stack(list(t4,t5, t6), group_header = c("Enteral nutrition support practices", "Oral nutrition supplement", "Parenteral nutrition support"))
+```
+
+
 ```{r skills-training}
-skills%>%
+t7 <- skills%>%
         select(-c(
                 years_experience_factor,
                 years_working_icu_factor,
@@ -135,6 +149,8 @@ skills%>%
         tbl_summary()%>%
         modify_caption("**Skills and training**")%>%
         bold_labels()
+
+t7
 ```
 
 
@@ -143,12 +159,11 @@ skills%>%
 ## Subcategory summary tables
 
 
-### Nutrition assessment
-
+### Professions analysis
 
 
 ```{r subgroup-nutrition-assessment}
-nutrition_assessment%>%
+t8 <- nutrition_assessment%>%
         select(-c(
                 years_experience_factor,
                 years_working_icu_factor,
@@ -164,7 +179,125 @@ nutrition_assessment%>%
 ```
 
 
-```{r years-experience}
+```{r subgroup-decision}
+t9 <- decision%>%
+        select(-c(
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        ))%>%
+        tbl_summary(
+                by = profession_doctor_nurse
+        )%>%
+        modify_caption("**Nutrition support decision making by profession**")%>%
+        bold_labels()%>%
+        add_p()%>%
+        bold_p()
+```
+
+
+```{r subgroup-enteral-nutrition}
+t10 <- en%>%
+        select(-c(
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        ))%>%
+        tbl_summary(
+                by = profession_doctor_nurse
+        )%>%
+        modify_caption("**Enteral nutrition support practices by profession**")%>%
+        bold_labels()%>%
+        add_p()%>%
+        bold_p()
+```
+
+
+```{r subgroup-ons}
+t11 <- ons%>%
+        select(-c(
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        ))%>%
+        tbl_summary(
+                by = profession_doctor_nurse
+        )%>%
+        modify_caption("**Oral nutrition support practices by profession**")%>%
+        bold_labels()%>%
+        add_p()%>%
+        bold_p()
+```
+
+
+
+```{r subgroup-pn}
+t12 <- pn%>%
+        select(-c(
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        ))%>%
+        tbl_summary(
+                by = profession_doctor_nurse
+        )%>%
+        modify_caption("**Parenteral nutrition support practices by profession**")%>%
+        bold_labels()%>%
+        add_p()%>%
+        bold_p()
+```
+
+```{r tbl-stack-nsp}
+tbl_stack(list(t8,t9, t10, t11, t12), group_header = c("Nutrition assessment","Nutrition support decision making", "Enteral nutrition support practices", "Oral nutrition supplement", "Parenteral nutrition support"))
+```
+
+
+
+```{r subgroup-skills}
+t13 <- skills%>%
+        select(-c(
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        ))%>%
+        tbl_summary(
+                by = profession_doctor_nurse
+        )%>%
+        modify_caption("**Skills and training by profession**")%>%
+        bold_labels()%>%
+        add_p()%>%
+        bold_p()
+
+t13
+```
+
+
+```{r plot-competence}
+ggplot(data = skills, aes(competence)) +
+  geom_bar() +
+  labs(title = "Self-reported competence of professionals", x="Self-reported competence", y="Frequency") +
+  facet_wrap(~ profession_doctor_nurse) 
+```
+
+```{r plot-source-info}
+ggplot(data = skills, aes(source_info)) +
+  geom_bar() +
+  facet_wrap(~ profession_doctor_nurse)
+```
+
+
+
+
+
+
+
+
+
+
+### Nutrition assessment
+
+
+```{r years-experience, eval=FALSE}
 nutrition_assessment%>%
         select(-c(
                 profession_doctor_nurse,
@@ -180,7 +313,7 @@ nutrition_assessment%>%
 ```
 
 
-```{r years-working-icu-na}
+```{r years-working-icu-na, eval=FALSE}
 nutrition_assessment%>%
         select(-c(
                 profession_doctor_nurse,
@@ -198,7 +331,7 @@ nutrition_assessment%>%
 
 
 
-```{r educ-level-nurses-na}
+```{r educ-level-nurses-na, eval=FALSE}
 nutrition_assessment%>%
         filter(profession_doctor_nurse == "Nurse")%>%
         select(-c(
@@ -223,24 +356,7 @@ nutrition_assessment%>%
 
 
 
-```{r subgroup-decision}
-decision%>%
-        select(-c(
-                years_experience_factor,
-                years_working_icu_factor,
-                educ_level_nurses
-        ))%>%
-        tbl_summary(
-                by = profession_doctor_nurse
-        )%>%
-        modify_caption("**Nutrition support decision making by profession**")%>%
-        bold_labels()%>%
-        add_p()%>%
-        bold_p()
-```
-
-
-```{r years-experience-decision}
+```{r years-experience-decision, eval=FALSE}
 decision%>%
         select(-c(
                 profession_doctor_nurse,
@@ -256,7 +372,7 @@ decision%>%
 ```
 
 
-```{r years-working-icu-decision}
+```{r years-working-icu-decision, eval=FALSE}
 decision%>%
         select(-c(
                 profession_doctor_nurse,
@@ -274,7 +390,7 @@ decision%>%
 
 
 
-```{r educ-level-nurses-decision}
+```{r educ-level-nurses-decision, eval=FALSE}
 decision%>%
         filter(profession_doctor_nurse == "Nurse")%>%
         select(-c(
@@ -299,24 +415,7 @@ decision%>%
 
 
 
-```{r subgroup-enteral-nutrition}
-en%>%
-        select(-c(
-                years_experience_factor,
-                years_working_icu_factor,
-                educ_level_nurses
-        ))%>%
-        tbl_summary(
-                by = profession_doctor_nurse
-        )%>%
-        modify_caption("**Enteral nutrition support practices by profession**")%>%
-        bold_labels()%>%
-        add_p()%>%
-        bold_p()
-```
-
-
-```{r years-experience-en}
+```{r years-experience-en, eval=FALSE}
 en%>%
         select(-c(
                 profession_doctor_nurse,
@@ -332,7 +431,7 @@ en%>%
 ```
 
 
-```{r years-working-icu-en}
+```{r years-working-icu-en, eval=FALSE}
 en%>%
         select(-c(
                 profession_doctor_nurse,
@@ -350,7 +449,7 @@ en%>%
 
 
 
-```{r educ-level-nurses-en}
+```{r educ-level-nurses-en, eval=FALSE}
 en%>%
         filter(profession_doctor_nurse == "Nurse")%>%
         select(-c(
@@ -373,26 +472,7 @@ en%>%
 ### Oral nutrition support practices
 
 
-
-
-```{r subgroup-ons}
-ons%>%
-        select(-c(
-                years_experience_factor,
-                years_working_icu_factor,
-                educ_level_nurses
-        ))%>%
-        tbl_summary(
-                by = profession_doctor_nurse
-        )%>%
-        modify_caption("**Oral nutrition support practices by profession**")%>%
-        bold_labels()%>%
-        add_p()%>%
-        bold_p()
-```
-
-
-```{r years-experience-ons}
+```{r years-experience-ons, eval=FALSE}
 ons%>%
         select(-c(
                 profession_doctor_nurse,
@@ -408,7 +488,7 @@ ons%>%
 ```
 
 
-```{r years-working-icu-ons}
+```{r years-working-icu-ons, eval=FALSE}
 ons%>%
         select(-c(
                 profession_doctor_nurse,
@@ -426,7 +506,7 @@ ons%>%
 
 
 
-```{r educ-level-nurses-ons}
+```{r educ-level-nurses-ons, eval=FALSE}
 ons%>%
         filter(profession_doctor_nurse == "Nurse")%>%
         select(-c(
@@ -450,26 +530,7 @@ ons%>%
 ### Parenteral nutrition support practices
 
 
-
-
-```{r subgroup-pn}
-pn%>%
-        select(-c(
-                years_experience_factor,
-                years_working_icu_factor,
-                educ_level_nurses
-        ))%>%
-        tbl_summary(
-                by = profession_doctor_nurse
-        )%>%
-        modify_caption("**Parenteral nutrition support practices by profession**")%>%
-        bold_labels()%>%
-        add_p()%>%
-        bold_p()
-```
-
-
-```{r years-experience-pn}
+```{r years-experience-pn, eval=FALSE}
 pn%>%
         select(-c(
                 profession_doctor_nurse,
@@ -485,7 +546,7 @@ pn%>%
 ```
 
 
-```{r years-working-icu-pn}
+```{r years-working-icu-pn, eval=FALSE}
 pn%>%
         select(-c(
                 profession_doctor_nurse,
@@ -503,7 +564,7 @@ pn%>%
 
 
 
-```{r educ-level-nurses-pn}
+```{r educ-level-nurses-pn, eval=FALSE}
 pn%>%
         filter(profession_doctor_nurse == "Nurse")%>%
         select(-c(
@@ -527,26 +588,7 @@ pn%>%
 ### Skills and training
 
 
-
-
-```{r subgroup-skills}
-skills%>%
-        select(-c(
-                years_experience_factor,
-                years_working_icu_factor,
-                educ_level_nurses
-        ))%>%
-        tbl_summary(
-                by = profession_doctor_nurse
-        )%>%
-        modify_caption("**Skills and training by profession**")%>%
-        bold_labels()%>%
-        add_p()%>%
-        bold_p()
-```
-
-
-```{r years-experience-skills}
+```{r years-experience-skills, eval=FALSE}
 skills%>%
         select(-c(
                 profession_doctor_nurse,
@@ -562,7 +604,7 @@ skills%>%
 ```
 
 
-```{r years-working-icu-skills}
+```{r years-working-icu-skills, eval=FALSE}
 skills%>%
         select(-c(
                 profession_doctor_nurse,
@@ -580,7 +622,7 @@ skills%>%
 
 
 
-```{r educ-level-nurses-skills}
+```{r educ-level-nurses-skills, eval=FALSE}
 skills%>%
         filter(profession_doctor_nurse == "Nurse")%>%
         select(-c(
@@ -604,11 +646,11 @@ skills%>%
 ## Bar charts/Visualisations
 
 
-```{r bar-chart-demographics}
+```{r bar-chart-demographics, eval=FALSE}
 BarChart(data = demographics)
 ```
 
-```{r decision}
+```{r decision, eval=FALSE}
 subset_decision <- decision%>%
         select(-c(
                 profession_doctor_nurse,
@@ -620,7 +662,7 @@ BarChart(data = subset_decision)
 ```
 
 
-```{r en}
+```{r en, eval=FALSE}
 subset_en <- en%>%
         select(-c(
                 profession_doctor_nurse,
@@ -632,7 +674,7 @@ BarChart(data = subset_en)
 ```
 
 
-```{r nutrition-assessment-bar-chart}
+```{r nutrition-assessment-bar-chart, eval=FALSE}
 subset_na <- nutrition_assessment%>%
         select(-c(
                 profession_doctor_nurse,
@@ -644,7 +686,7 @@ BarChart(data = subset_na)
 ```
 
 
-```{r ons}
+```{r ons, eval=FALSE}
 subset_ons <- ons%>%
         select(-c(
                 profession_doctor_nurse,
@@ -656,7 +698,7 @@ BarChart(data = subset_ons)
 ```
 
 
-```{r skills}
+```{r skills, eval=FALSE}
 subset_skills <- skills%>%
         select(-c(
                 profession_doctor_nurse,
@@ -668,7 +710,7 @@ BarChart(data = subset_skills)
 ```
 
 
-```{r skills-competence}
+```{r skills-competence, eval=FALSE}
 # Competence in nutrition support
 BarChart(competence, data = skills,
          xlab = "Competence level",
@@ -678,7 +720,7 @@ BarChart(competence, data = skills,
 ```
 
 
-```{r skills-nutrition-education}
+```{r skills-nutrition-education, eval=FALSE}
 BarChart(formal_nutr_educ, data = skills,
          xlab = "Formal nutrition education",
          ylab = "Frequency of participants",
@@ -693,7 +735,7 @@ BarChart(formal_nutr_educ, data = skills,
 
 
 
-```{r bar-chart-skills}
+```{r bar-chart-skills, eval=FALSE}
 #### Explanatory data analysis
 skills%>%
         filter(!is.na(source_info))%>%

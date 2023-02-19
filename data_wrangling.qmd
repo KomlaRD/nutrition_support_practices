@@ -239,7 +239,7 @@ df <- df%>%
 ```
 
 
-```{r view-digits-working-icu}
+```{r view-digits-working-icu, eval=FALSE}
 # View strings with digits in the years working in the ICU
 str_view_all(df$years_working_icu,"\\d") 
 ```
@@ -470,7 +470,7 @@ skills <- skills%>%
 )
 ```
 
-```{r export-datasets}
+```{r export-datasets-csv}
 # full dataset
 export(df, here("data", "nss_clean.csv"))
 
@@ -497,6 +497,35 @@ export(skills, here("data", "skills.csv"))
 
 # mcqs
 export(mcqs, here("data", "mcqs.csv"))
+```
+
+```{r export-r-data}
+# full dataset
+export(df, here("data", "nss_clean.RData"))
+
+# demographics
+export(demographics, here("data", "demographics.RData"))
+
+# nutrition assessment
+export(nutrition_assessment, here("data", "nutrition_assessment.RData"))
+
+# decision
+export(decision, here("data", "decision.RData"))
+
+# en
+export(en, here("data", "enteral_nutrition.RData"))
+
+# ons
+export(ons, here("data", "oral_nutrition_supplement.RData"))
+
+# pn
+export(pn, here("data", "parenteral_nutrition.RData"))
+
+# skills
+export(skills, here("data", "skills.RData"))
+
+# mcqs
+export(mcqs, here("data", "mcqs.RData"))
 ```
 
 

@@ -842,7 +842,7 @@ mcqs_merge <- merge_nss%>%
 
 ```{r wrangle-skills-training}
 # Convert Others: Literature to Journal articles for source of information
-skills_merge$source_info <- replace(skills_merge$source_info, 7, "Journal articles")
+skills_merge$source_info <- replace(skills_merge$source_info, 13, "Journal articles")
 
 
 # Convert Others: Media to Media under source of information

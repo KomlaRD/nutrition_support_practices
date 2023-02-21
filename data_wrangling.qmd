@@ -602,7 +602,9 @@ merge_nss <- merge_nss%>%
                 formal_nutr_educ = ff_label(formal_nutr_educ, "Have you had any formal nutrition education or training?"),
                 source_info = ff_label(source_info, "Main source of information for nutrition support"),
                 other_info = ff_label(other_info, "Source of information (others)"),
-                 profession_doctor_nurse = ff_label(profession_doctor_nurse, "Doctor/Nurse")
+                 profession_doctor_nurse = ff_label(profession_doctor_nurse, "Doctor/Nurse"),
+                years_working_icu_factor = ff_label(years_working_icu_factor, "How many years have you been working in the ICU?"),
+                years_experience_factor = ff_label("Years of professional experience")
         )
 ```
 

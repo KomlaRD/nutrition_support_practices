@@ -604,7 +604,7 @@ merge_nss <- merge_nss%>%
                 other_info = ff_label(other_info, "Source of information (others)"),
                  profession_doctor_nurse = ff_label(profession_doctor_nurse, "Doctor/Nurse"),
                 years_working_icu_factor = ff_label(years_working_icu_factor, "How many years have you been working in the ICU?"),
-                years_experience_factor = ff_label("Years of professional experience")
+                years_experience_factor = ff_label(years_experience_factor ,"Years of professional experience")
         )
 ```
 

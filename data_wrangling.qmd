@@ -22,7 +22,7 @@ pacman::p_load(
         psych, # Describe dataset
         lessR, # Multiple plots and statistical tests
         forcats, # Working with factors 
-        htmlwidgets
+        #htmlwidgets
 )
 ```
 
@@ -136,6 +136,7 @@ colnames(df) <- c(
 )
 ```
 
+
 ```{r descriptive-column-names-pre-survey}
 # Descriptive names of columns in the dataset
 colnames(df_two) <- c(
@@ -175,11 +176,11 @@ colnames(df_two) <- c(
         "vascular_access_pn", 
         "biochem_pn", 
         "monitoring_pn", 
+        "methods_pn",
         "competence", 
         "formal_nutr_educ", 
         "source_info", 
-        "other_info",
-        "specific_other_info"
+        "other_info"
 )
 ```
 
@@ -404,8 +405,7 @@ df_two <- df_two%>%
                                 "Doctor" = "Medical doctor (anaesthesiologist)",
                                 "Nurse" = "Nurse (Critical care)"
         )%>%
-                ff_label("Professional categories"),
-        other_info_specify = specific_other_info
+                ff_label("Professional categories")
         )
 ```
 
@@ -544,6 +544,21 @@ df_two <- df_two%>%
 ```
 
 
+```{r merge-dataset}
+merge_nss <- merge(df, df_two, all = TRUE)
+```
+
+```{r remove-redundant-columns-merge-dataset}
+merge_nss <- merge_nss %>%
+  select(-c(
+    years_working_icu,
+    methods_pn,
+    years_experience_transform,
+    years_experience,
+    years_working_icu_transform
+  ))
+```
+
 
 ```{r create-multiple-tables}
 # Demographics table
@@ -660,19 +675,134 @@ mcqs <- df%>%
 ```
 
 
+```{r split-merge-dataset}
+# Demographics table
+demographics_merge <- merge_nss%>%
+        select(
+                age_group,
+                years_working_icu_factor,
+                profession,
+                years_experience_factor,
+                nutrition_support_team,
+                educ_level_nurses
+        )
+
+# Nutrition screening and assessment table
+
+nutrition_assessment_merge <- merge_nss%>%
+        select(
+                nutrition_assessment,
+                profession_assessment,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Nutrition support decision making table
+
+decision_merge <- merge_nss%>%select(
+        nutrition_protocol,
+        fluid_volume_decision,
+        decide_route,
+         profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+)
+
+
+# Enteral nutrition support table
+
+en_merge <- merge_nss%>%
+        select(
+                grv_en,
+                timing_en,
+                common_route_en,
+                rationale_post_pylorus,
+                tube_placement_en,
+                checking_position_en,
+                pattern_en,
+                frequency_changing_en,
+                feed_tolerance_en,
+                optimise_en,
+                freq_monitor_en,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Oral nutrition supplements table
+
+ons_merge <- merge_nss%>%
+        select(
+                protocol_ons,
+                tolerance_ons,
+                 profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Parenteral nutrition table
+
+pn_merge <- merge_nss%>%
+        select(
+                basis_pn,
+                rationale_pn,
+                vascular_access_pn,
+                biochem_pn,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Skills and training table
+
+skills_merge <- merge_nss%>%
+        select(
+                competence,
+                formal_nutr_educ,
+                source_info,
+                other_info,
+                profession_doctor_nurse,
+                years_experience_factor,
+                years_working_icu_factor,
+                educ_level_nurses
+        )
+
+# Multiple choice questions- Create visualisations
+mcqs_merge <- merge_nss%>%
+        select(
+                nutrition_tools,
+                nutrition_requirement,
+                commence_en,
+                commence_pn,
+                basis_en,
+                feed_tolerance_en,
+                methods_monitoring_en,
+                rationale_ons,
+                timing_pn,
+                monitoring_pn
+        )
+```
+
+
 ```{r wrangle-skills-training}
 # Convert Others: Literature to Journal articles for source of information
 skills$source_info <- replace(skills$source_info, 7, "Journal articles")
 
 
 # Convert Others: Media to Media under source of information
-levels(skills$source_info)[levels(skills$source_info) == "Other"] <- "Media"
+#levels(skills$source_info)[levels(skills$source_info) == "Other"] <- "Media"
 
 # Remove Other source of information from dataframe (skills)
-skills <- skills%>%
-        select(
-        -c(other_info)
-)
+# skills <- skills%>%
+#         select(
+#         -c(other_info)
+# )
 ```
 
 ```{r export-datasets-csv}

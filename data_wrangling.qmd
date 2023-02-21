@@ -792,7 +792,7 @@ mcqs_merge <- merge_nss%>%
 
 ```{r wrangle-skills-training}
 # Convert Others: Literature to Journal articles for source of information
-skills$source_info <- replace(skills$source_info, 7, "Journal articles")
+skills_merge$source_info <- replace(skills_merge$source_info, 7, "Journal articles")
 
 
 # Convert Others: Media to Media under source of information
@@ -863,4 +863,33 @@ export(skills, here("data", "skills.RData"))
 export(mcqs, here("data", "mcqs.RData"))
 ```
 
+
+```{r export-merge-dataset}
+# full dataset
+export(merge_nss, here("data", "nss_merge_clean.RData"))
+
+# demographics
+export(demographics_merge, here("data", "demographics_merge.RData"))
+
+# nutrition assessment
+export(nutrition_assessment_merge, here("data", "nutrition_assessment_merge.RData"))
+
+# decision
+export(decision_merge, here("data", "decision_merge.RData"))
+
+# en
+export(en_merge, here("data", "enteral_nutrition_merge.RData"))
+
+# ons
+export(ons_merge, here("data", "oral_nutrition_supplement_merge.RData"))
+
+# pn
+export(pn_merge, here("data", "parenteral_nutrition_merge.RData"))
+
+# skills
+export(skills_merge, here("data", "skills_merge.RData"))
+
+# mcqs
+export(mcqs_merge, here("data", "mcqs_merge.RData"))
+```
 

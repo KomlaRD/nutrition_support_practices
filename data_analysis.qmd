@@ -29,18 +29,18 @@ pacman::p_load(
 
 ```{r import-datasets}
 # Full clean dataset
-nss <- import(here("data","nss_clean.RData"))
+nss <- import(here("data","nss_merge_clean.RData"))
 
 # Subset dataset
 ## Demographics
-demographics <- import(here("data","demographics.RData"))
-en <- import(here("data","enteral_nutrition.RData"))
-mcqs <- import(here("data","mcqs.csv"))
-nutrition_assessment <- import(here("data","nutrition_assessment.RData"))
-ons <- import(here("data","oral_nutrition_supplement.RData"))
-pn <- import(here("data","parenteral_nutrition.RData"))
-skills <- import(here("data","skills.RData"))
-decision <- import(here("data","decision.RData"))
+demographics <- import(here("data","demographics_merge.RData"))
+en <- import(here("data","enteral_nutrition_merge.RData"))
+mcqs <- import(here("data","mcqs_merge.RData"))
+nutrition_assessment <- import(here("data","nutrition_assessment_merge.RData"))
+ons <- import(here("data","oral_nutrition_supplement_merge.RData"))
+pn <- import(here("data","parenteral_nutrition_merge.RData"))
+skills <- import(here("data","skills_merge.RData"))
+decision <- import(here("data","decision_merge.RData"))
 ```
 
 

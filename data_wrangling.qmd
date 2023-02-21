@@ -28,7 +28,12 @@ pacman::p_load(
 
 ```{r import-dataset}
 # Import dataset
+
+## Main survey
 df <- import(here("data","nss.csv"))
+
+## Pre-survey
+df_two <- import(here("data","pre_nss.csv"))
 ```
 
 
@@ -54,6 +59,10 @@ Doctor and pharmacist were collectively categorised as doctors and general and c
 ```{r glimpse-data}
 # Assess dataset
 glimpse(df)
+```
+
+```{r glimpse-data}
+glimpse(df_two)
 ```
 
 ```{r remove-first-two-columns}

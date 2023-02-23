@@ -465,26 +465,44 @@ df$years_working_icu_transform <- df$years_working_icu_transform%>%
 df$years_working_icu_transform <- replace(df$years_working_icu_transform, df$years_working_icu_transform == "", 0)
 ```
 
+```{r convert-to-numeric}
+# Pre-survey
+
+df_two <- df_two%>%
+  mutate (
+    years_working_icu_transform = as.integer(years_working_icu_transform)
+  )
+
+# Main study
+df <- df%>%
+  mutate (
+    years_working_icu_transform = as.integer(years_working_icu_transform)
+  )
+```
+
 
 ```{r case-when-years-working-icu}
 # Mutate and create a new variable with years working in the ICU based on a logic statement
 df <- df%>%
         mutate(
-                 years_working_icu_factor = case_when(
-                years_working_icu_transform < 1 ~ "< 1 year",
-                years_working_icu_transform >= 1 ~ ">= 1 year"
-        ) )
+                years_working_icu_factor = case_when(
+                years_working_icu_transform >= 0 &  years_working_icu_transform <= 5  ~ "0-5 years",
+                years_working_icu_transform >= 6.0 & years_working_icu_transform <= 10 ~ "6-10 years",
+                years_working_icu_transform >= 11 & years_working_icu_transform <= 15 ~  "11-15 years",
+                years_working_icu_transform > 15 ~ "> 15 years"
+        ))
 ```
 
 ```{r case-when-pre-survey-years-icu}
 # Mutate and create a new variable with years working in the ICU based on a logic statement
 df_two <- df_two%>%
-        mutate(
-                 years_working_icu_factor = case_when(
-                years_working_icu_transform < 1 ~ "< 1 year",
-                years_working_icu_transform >= 1 ~ ">= 1 year"
+        mutate( years_working_icu_factor = case_when(
+                years_working_icu_transform >= 0 &  years_working_icu_transform <= 5  ~ "0-5 years",
+                years_working_icu_transform >= 6 & years_working_icu_transform <= 10.9 ~ "6-10 years",
+                years_working_icu_transform > 15 ~ "> 15 years"
         ) )
 ```
+
 
 
 ```{r years-working-profession-transform}

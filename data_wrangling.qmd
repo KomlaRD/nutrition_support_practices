@@ -773,10 +773,11 @@ decision_merge <- merge_nss%>%select(
         nutrition_protocol,
         fluid_volume_decision,
         decide_route,
-         profession_doctor_nurse,
-                years_experience_factor,
-                years_working_icu_factor,
-                educ_level_nurses
+        profession_doctor_nurse,
+        years_experience_factor,
+        years_working_icu_factor,
+        educ_level_nurses,
+        nutrition_support_team
 )
 
 

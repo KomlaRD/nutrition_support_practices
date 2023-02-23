@@ -24,7 +24,8 @@ pacman::p_load(
         psych, # Describe dataset
         lessR, # Multiple plots and statistical tests
         forcats, # Working with factors
-        ggthemes
+        ggthemes, # Themes
+        questionr # Multiple choice questions
 )
 ```
 
@@ -304,5 +305,15 @@ ggplot(data = skills, aes(source_info)) +
 ```
 
 
+## Multiple choice questions
+
+```{r split-multiple-choice-questions}
+# Nutrition tools
+nutrition_tools <- multi.split(mcqs$nutrition_tools, split.char = ";")
+```
+
+```{r frequency-tables}
+freq_nutrition_tools <- multi.table(nutrition_tools)
+```
 
 

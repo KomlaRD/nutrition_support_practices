@@ -1,7 +1,7 @@
 ---
 title: "Nutrition support practices- Data analysis"
 author: "Eric Anku, Dr. Lamptey Samad, George Akafity, Sarah Amoo, Dr. Lauren Hill"
-format: html
+format: docx
 ---
 
 
@@ -376,7 +376,7 @@ freq_monitoring_pn <- multi.table(monitoring_pn)
 ```
 
 
-```{r barplot}
+```{r barplot, eval = FALSE}
 barplot(multitab[[1]], names.arg = row.names(multitab), main = "What nutrition screening/assessment methods or tools are used?", xlab = "Responses", ylab = "Frequency")
 ```
 

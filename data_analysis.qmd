@@ -59,7 +59,7 @@ decision <- import(here("data","decision_merge.RData"))
 demographics%>%
   select(-nutrition_support_team)%>%
         tbl_summary(
-          missing="no"
+          missing_text ="No response"
         )%>%
         modify_caption("**Characteristics of participants**")%>%
         bold_labels()
@@ -75,7 +75,7 @@ t2 <- nutrition_assessment%>%
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing = "no"
+          missing_text = "No response"
         )%>%
         modify_caption("**Nutrition screening and assessment**")%>%
         bold_labels()
@@ -91,7 +91,7 @@ t3 <- decision%>%
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing = "no"
+          missing_text = "No response"
         )%>%
         modify_caption("**Nutrition support decision making**")%>%
         bold_labels()
@@ -111,7 +111,7 @@ t4 <- en%>%
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing = "no"
+          missing_text = "No response"
         )%>%
         modify_caption("**Enteral nutrition support practices**")%>%
         bold_labels()
@@ -125,7 +125,7 @@ t5<- ons%>%select(-c(
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing = "no"
+          missing_text = "No response"
         )%>%
         modify_caption("**Oral nutrition support practices**")%>%
         bold_labels()
@@ -140,7 +140,7 @@ t6 <- pn%>%select(-c(
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing = "no"
+          missing_text = "No response"
         )%>%
         modify_caption("**Parenteral nutrition support practices**")%>%
         bold_labels()
@@ -161,7 +161,7 @@ t7 <- skills%>%
                 other_info
         ))%>%
         tbl_summary(
-          missing = "no"
+          missing_text = "No response"
         )%>%
         modify_caption("**Skills and training**")%>%
         bold_labels()

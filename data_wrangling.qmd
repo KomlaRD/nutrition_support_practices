@@ -22,7 +22,6 @@ pacman::p_load(
         psych, # Describe dataset
         lessR, # Multiple plots and statistical tests
         forcats, # Working with factors 
-        #htmlwidgets
 )
 ```
 
@@ -214,7 +213,7 @@ df <- df%>%
                                       "Pharmacist"))%>%
                         ff_label("Professional qualification"),
                 nutrition_support_team = factor(nutrition_support_team)%>%
-                        ff_label("Does the ICU have a formal nutrition support team?"),
+                        ff_label("Presence of nutrition support team"),
                 educ_level_nurses = factor(educ_level_nurses)%>%
                         fct_relevel(c("Diploma",
                                       "Degree",
@@ -222,76 +221,76 @@ df <- df%>%
                                       "PhD"))%>%
                         ff_label("Highest level of education (Nurses)"),
                 nutrition_assessment = factor(nutrition_assessment)%>%
-                        ff_label("Is nutrition screening or nutritional status assessment routine practice in the ICU?"),
+                        ff_label("Nutrition screening or nutrition assessment practice"),
                 profession_assessment = factor(profession_assessment)%>%
-                        ff_label("What is the profession of the person who mainly performs nutrition assessment"),
+                        ff_label("Profession responsible for nutrition assessment"),
                 nutrition_tools = factor(nutrition_tools)%>%
-                        ff_label("Which nutrition screening/assessment methods or tools are used"),
+                        ff_label("Nutrition screening/assessment tools"),
                 nutrition_requirement = factor(nutrition_requirement)%>%
                         ff_label("Usual methods for calculating nutritional requirements"),
                 nutrition_protocol = factor(nutrition_protocol)%>%
-                        ff_label("Does the ICU have a formal, written nutrition support protocol?"),
+                        ff_label("Formal, written nutrition protocol"),
                 fluid_volume_decision = factor(fluid_volume_decision)%>%
-                        ff_label("Usual method for determining fluid volume allocated to nutrition support"),
+                        ff_label("Fluid determination for nutrition support"),
                 commence_en = factor(commence_en)%>%
-                        ff_label("Which criteria determines whether EN is commmenced?"),
+                        ff_label("Criteria to commence EN"),
                 commence_pn = factor(commence_pn)%>%
-                        ff_label("Which criteria determines whether PN is commmenced?"),
+                        ff_label("Criteria to commence PN"),
                 decide_route = factor(decide_route)%>%
-                        ff_label("What is the profession of the person who mainly decides which route (enteral or parenteral) of nutrition support the patient should receive?"),
+                        ff_label("Profession who determines route of EN or PN"),
                 basis_en = factor(basis_en)%>%
-                        ff_label("What is the basis for enteral nutrition support decision making?"),
+                        ff_label("Basis of EN decision making"),
                 grv_en = factor(grv_en)%>%
-                        ff_label("Indicate the gastric residual volume/aspirate volumen threshold used to guide practice"),
+                        ff_label("GRV threshold used to guide practice"),
                 timing_en = factor(timing_en)%>%
-                        ff_label("Indicate the typical timing for initiation of enteral nutrition"),
+                        ff_label("Timing for initiation of EN"),
                 common_route_en = factor(common_route_en)%>%
-                        ff_label("Indicate the most commonly used route of enteral nutrition delivery"),
+                        ff_label("Commonly used route of EN delivery"),
                 rationale_post_pylorus = factor(rationale_post_pylorus)%>%
-                        ff_label("Indicate the rationale for use of post-pyloric enteral feed delivery"),
+                        ff_label("Rationale for use of post-pyloric enteral feed delivery"),
                 tube_placement_en = factor(tube_placement_en)%>%
-                        ff_label("Indicate usial procedure for placing enteral feeding tubes"),
+                        ff_label("Enteral feeding tubes placement"),
                 checking_position_en = factor (checking_position_en)%>%
-                        ff_label("Indicate usual procedure for checking the position of enteral feeding tubes"),
+                        ff_label("Checking position of enteral feeding tubes"),
                 pattern_en = factor(pattern_en)%>%
-                        ff_label("Indicate usual pattern of enteral nutrition support delivery"),
+                        ff_label("Pattern of EN delivery"),
                 frequency_changing_en = factor(frequency_changing_en)%>%
-                        ff_label("Indicate frequency of changing enteral feeding tubes"),
+                        ff_label("Frequency of changing enteral feeding tubes"),
                 feed_tolerance_en = factor(feed_tolerance_en)%>%
-                        ff_label("Usual frequency of assessing enteral feed tolerance"),
+                        ff_label("Frequency of assessing enteral feed tolerance"),
                 method_tolerance_en = factor(method_tolerance_en)%>%
-                        ff_label("Usual method of assessing enteral feed tolerance"),
+                        ff_label("Method for assessing enteral feed tolerance"),
                 optimise_en = factor(optimise_en)%>%
-                        ff_label("Usual method of optimising enteral nutrition"),
+                        ff_label("Usual method of optimising EN"),
                 freq_monitor_en = factor(freq_monitor_en)%>%
-                        ff_label("Usual frequency of monitoring enteral nutrition support"),
+                        ff_label("Usual frequency of monitoring EN"),
                 methods_monitoring_en = factor(methods_monitoring_en)%>%
-                        ff_label("Usual methods of monitoring enteral nutrition support"),
+                        ff_label("Usual methods of monitoring EN"),
                 protocol_ons = factor(protocol_ons)%>%
-                        ff_label("Does the ICU have a protocol for the use of oral nutrition supplements?"),
+                        ff_label("Protocol for the use of ONS?"),
                 rationale_ons = factor(rationale_ons)%>%
-                        ff_label("Usual rationale for use of oral nutrition supplements"),
+                        ff_label("Usual rationale for use of ONS"),
                 tolerance_ons = factor(tolerance_ons)%>%
                         ff_label("Frequency of assessment of tolerance and patient acceptability"),
                 basis_pn = factor(basis_pn)%>%
-                        ff_label("What is the basis for parenteral nutrition support decision making?"),
+                        ff_label("Basis for PN decision making"),
                 timing_pn = factor(timing_pn)%>%
-                        ff_label("Indicate the usual timing of parenteral nutrition support initiation"),
+                        ff_label("Usual timing of PN initiation"),
                 rationale_pn = factor(rationale_pn)%>%
-                        ff_label("Usual rationale for parenteral nutrition use"),
+                        ff_label("Rationale for PN use"),
                 vascular_access_pn = factor(vascular_access_pn)%>%
-                        ff_label("Indicate most commonly used vascular access for parentral nutrition delivery"),
+                        ff_label("Commonly used vascular access for PN delivery"),
                 biochem_pn = factor(biochem_pn)%>%
-                        ff_label("Usual frequency of biochemical monitoring of parenteral nutrition safety and tolerance"),
+                        ff_label("Frequency of biochemical monitoring of PN safety and tolerance"),
                 monitoring_pn = factor(monitoring_pn)%>%
-                        ff_label("Usual methods of monitoring parenteral nutrition support"),
+                        ff_label("Usual methods of monitoring PN"),
                 competence = factor(competence)%>%
-                        ff_label("How competent/skilled do you consider yourself in nutrition support?")%>%
+                        ff_label("Competence in nutrition support")%>%
                         fct_relevel(c("Satisfactory/average- I get by unless the patient is complex", "Above average- I can manage most nutrition support with confidence",
                                       "Below average- I am not confident in managing most in nutrition support",
                                       "Totally unskilled- I don't have even basic knowledge of nutrition support")),
                 formal_nutr_educ = factor(formal_nutr_educ)%>%
-                        ff_label("Have you had any formal nutrition education or training?"),
+                        ff_label("Formal nutrition education or training"),
                 source_info = factor(source_info)%>%
                         ff_label("Main source of information for nutrition support")%>%
                         fct_relevel(c("Feeding protocol", "In-service training", "Colleagues", "Journal articles", "Workshop/Conference", "Media")),
@@ -322,78 +321,78 @@ df_two <- df_two%>%
                                       "Nurse (Critical care)"))%>%
                         ff_label("Professional qualification"),
                 nutrition_support_team = factor(nutrition_support_team)%>%
-                        ff_label("Does the ICU have a formal nutrition support team?"),
+                        ff_label("Presence of nutrition support team"),
                 nutrition_assessment = factor(nutrition_assessment)%>%
-                        ff_label("Is nutrition screening or nutritional status assessment routine practice in the ICU?"),
+                        ff_label("Nutrition screening or nutrition assessment practice"),
                 profession_assessment = factor(profession_assessment)%>%
-                        ff_label("What is the profession of the person who mainly performs nutrition assessment"),
+                        ff_label("Profession responsible for nutrition assessment"),
                 nutrition_tools = factor(nutrition_tools)%>%
-                        ff_label("Which nutrition screening/assessment methods or tools are used"),
+                        ff_label("Nutrition screening/assessment tools"),
                 nutrition_requirement = factor(nutrition_requirement)%>%
                         ff_label("Usual methods for calculating nutritional requirements"),
                 nutrition_protocol = factor(nutrition_protocol)%>%
-                        ff_label("Does the ICU have a formal, written nutrition support protocol?"),
+                        ff_label("Formal, written nutrition protocol"),
                 fluid_volume_decision = factor(fluid_volume_decision)%>%
-                        ff_label("Usual method for determining fluid volume allocated to nutrition support"),
+                        ff_label("Fluid determination for nutrition support"),
                 commence_en = factor(commence_en)%>%
-                        ff_label("Which criteria determines whether EN is commmenced?"),
+                        ff_label("Criteria to commence EN"),
                 commence_pn = factor(commence_pn)%>%
-                        ff_label("Which criteria determines whether PN is commmenced?"),
+                        ff_label("Criteria to commence PN"),
                 decide_route = factor(decide_route)%>%
-                        ff_label("What is the profession of the person who mainly decides which route (enteral or parenteral) of nutrition support the patient should receive?"),
+                        ff_label("Profession who determines route of EN or PN"),
                 basis_en = factor(basis_en)%>%
-                        ff_label("What is the basis for enteral nutrition support decision making?"),
+                        ff_label("Basis of EN decision making"),
                 grv_en = factor(grv_en)%>%
-                        ff_label("Indicate the gastric residual volume/aspirate volumen threshold used to guide practice"),
+                        ff_label("GRV threshold used to guide practice"),
                 timing_en = factor(timing_en)%>%
-                        ff_label("Indicate the typical timing for initiation of enteral nutrition"),
+                        ff_label("Timing for initiation of EN"),
                 common_route_en = factor(common_route_en)%>%
-                        ff_label("Indicate the most commonly used route of enteral nutrition delivery"),
+                        ff_label("Commonly used route of EN delivery"),
                 rationale_post_pylorus = factor(rationale_post_pylorus)%>%
-                        ff_label("Indicate the rationale for use of post-pyloric enteral feed delivery"),
+                        ff_label("Rationale for use of post-pyloric enteral feed delivery"),
                 tube_placement_en = factor(tube_placement_en)%>%
-                        ff_label("Indicate usial procedure for placing enteral feeding tubes"),
+                        ff_label("Enteral feeding tubes placement"),
                 checking_position_en = factor (checking_position_en)%>%
-                        ff_label("Indicate usual procedure for checking the position of enteral feeding tubes"),
+                        ff_label("Checking position of enteral feeding tubes"),
                 pattern_en = factor(pattern_en)%>%
-                        ff_label("Indicate usual pattern of enteral nutrition support delivery"),
+                        ff_label("Pattern of EN delivery"),
                 frequency_changing_en = factor(frequency_changing_en)%>%
-                        ff_label("Indicate frequency of changing enteral feeding tubes"),
+                        ff_label("Frequency of changing enteral feeding tubes"),
                 feed_tolerance_en = factor(feed_tolerance_en)%>%
-                        ff_label("Usual frequency of assessing enteral feed tolerance"),
+                        ff_label("Frequency of assessing enteral feed tolerance"),
                 method_tolerance_en = factor(method_tolerance_en)%>%
-                        ff_label("Usual method of assessing enteral feed tolerance"),
+                        ff_label("Method for assessing enteral feed tolerance"),
                 optimise_en = factor(optimise_en)%>%
-                        ff_label("Usual method of optimising enteral nutrition"),
+                        ff_label("Usual method of optimising EN"),
                 freq_monitor_en = factor(freq_monitor_en)%>%
-                        ff_label("Usual frequency of monitoring enteral nutrition support"),
+                        ff_label("Usual frequency of monitoring EN"),
                 methods_monitoring_en = factor(methods_monitoring_en)%>%
                         ff_label("Usual methods of monitoring enteral nutrition support"),
                 protocol_ons = factor(protocol_ons)%>%
-                        ff_label("Does the ICU have a protocol for the use of oral nutrition supplements?"),
+                        ff_label("Protocol for the use of ONS?"),
                 rationale_ons = factor(rationale_ons)%>%
-                        ff_label("Usual rationale for use of oral nutrition supplements"),
+                        ff_label("Usual rationale for use of ONS"),
                 tolerance_ons = factor(tolerance_ons)%>%
                         ff_label("Frequency of assessment of tolerance and patient acceptability"),
                 basis_pn = factor(basis_pn)%>%
-                        ff_label("What is the basis for parenteral nutrition support decision making?"),
+                        ff_label("Basis for PN decision making"),
                 timing_pn = factor(timing_pn)%>%
-                        ff_label("Indicate the usual timing of parenteral nutrition support initiation"),
+                        ff_label("Usual timing of PN initiation"),
                 rationale_pn = factor(rationale_pn)%>%
-                        ff_label("Usual rationale for parenteral nutrition use"),
+                        ff_label("Rationale for PN use"),
                 vascular_access_pn = factor(vascular_access_pn)%>%
-                        ff_label("Indicate most commonly used vascular access for parentral nutrition delivery"),
+                        ff_label("Commonly used vascular access for PN delivery"),
                 biochem_pn = factor(biochem_pn)%>%
-                        ff_label("Usual frequency of biochemical monitoring of parenteral nutrition safety and tolerance"),
+                        ff_label("Frequency of biochemical monitoring of PN safety and tolerance"),
                 monitoring_pn = factor(monitoring_pn)%>%
-                        ff_label("Usual methods of monitoring parenteral nutrition support"),
+                        ff_label("Usual methods of monitoring PN"),
                 competence = factor(competence)%>%
-                        ff_label("How competent/skilled do you consider yourself in nutrition support?")%>%
+                        ff_label("Competence in nutrition support")%>%
                         fct_relevel(c("Satisfactory/average- I get by unless the patient is complex", "Above average- I can manage most nutrition support with confidence",
                                       "Below average- I am not confident in managing most in nutrition support",
                                       "Totally unskilled- I don't have even basic knowledge of nutrition support")),
                 formal_nutr_educ = factor(formal_nutr_educ)%>%
-                        ff_label("Have you had any formal nutrition education or training?"),
+                        ff_label("Formal nutrition education or training"),
                 source_info = factor(source_info)%>%
                         ff_label("Main source of information for nutrition support")%>%
                         fct_relevel(c("Feeding protocol", "In-service training", "Colleagues", "Journal articles", "Workshop/Conference", "Media")),
@@ -582,46 +581,46 @@ merge_nss <- merge_nss%>%
         mutate(
                 age_group = ff_label(age_group, "Age group"),
                 profession = ff_label(profession, "Professional qualification"),
-                nutrition_support_team = ff_label(nutrition_support_team,"Does the ICU have a formal nutrition support team?"),
+                nutrition_support_team = ff_label(nutrition_support_team,"Formal nutrition support team"),
                 educ_level_nurses = ff_label(educ_level_nurses, "Highest level of education (Nurses)"),
-                nutrition_assessment = ff_label(nutrition_assessment, "Is nutrition screening or nutritional status assessment routine practice in the ICU?"),
-                profession_assessment = ff_label(profession_assessment, "What is the profession of the person who mainly performs nutrition assessment"),
-                nutrition_tools = ff_label(nutrition_tools, "Which nutrition screening/assessment methods or tools are used"),
+                nutrition_assessment = ff_label(nutrition_assessment, "Nutrition screening or nutritional assessment in the ICU?"),
+                profession_assessment = ff_label(profession_assessment, "Profession of the person who mainly performs nutrition assessment"),
+                nutrition_tools = ff_label(nutrition_tools, "Nutrition screening/assessment methods or tools are used"),
                 nutrition_requirement = ff_label(nutrition_requirement, "Usual methods for calculating nutritional requirements"),
-                nutrition_protocol = ff_label(nutrition_protocol, "Does the ICU have a formal, written nutrition support protocol?"),
-                fluid_volume_decision = ff_label(fluid_volume_decision, "Usual method for determining fluid volume allocated to nutrition support"),
-                commence_en = ff_label(commence_en, "Which criteria determines whether EN is commmenced?"),
-                commence_pn = ff_label(commence_pn, "Which criteria determines whether PN is commmenced?"),
-                decide_route = ff_label(decide_route, "What is the profession of the person who mainly decides which route (enteral or parenteral) of nutrition support the patient should receive?"),
-                basis_en = ff_label(basis_en, "What is the basis for enteral nutrition support decision making?"),
-                grv_en = ff_label(grv_en, "Indicate the gastric residual volume/aspirate volumen threshold used to guide practice"),
-                timing_en = ff_label(timing_en, "Indicate the typical timing for initiation of enteral nutrition"),
-                common_route_en = ff_label(common_route_en, "Indicate the most commonly used route of enteral nutrition delivery"),
-                rationale_post_pylorus = ff_label(rationale_post_pylorus, "Indicate the rationale for use of post-pyloric enteral feed delivery"),
-                tube_placement_en = ff_label(tube_placement_en, "Indicate usial procedure for placing enteral feeding tubes"),
-                checking_position_en = ff_label(checking_position_en, "Indicate usual procedure for checking the position of enteral feeding tubes"),
-                pattern_en = ff_label(pattern_en, "Indicate usual pattern of enteral nutrition support delivery"),
-                frequency_changing_en = ff_label(frequency_changing_en, "Indicate frequency of changing enteral feeding tubes"),
+                nutrition_protocol = ff_label(nutrition_protocol, "Formal, written nutrition support protocol"),
+                fluid_volume_decision = ff_label(fluid_volume_decision, "Method for determining fluid volume allocated to nutrition support"),
+                commence_en = ff_label(commence_en, "Criteria to commence EN"),
+                commence_pn = ff_label(commence_pn, "Criteria to commence PN"),
+                decide_route = ff_label(decide_route, "Profession of the person who decides route of nutrition support"),
+                basis_en = ff_label(basis_en, "Basis for EN decision making?"),
+                grv_en = ff_label(grv_en, "GRV threshold used to guide practice"),
+                timing_en = ff_label(timing_en, "Timing for initiation of EN"),
+                common_route_en = ff_label(common_route_en, "Commonly used route of EN delivery"),
+                rationale_post_pylorus = ff_label(rationale_post_pylorus, "Rationale for use of post-pyloric enteral feed delivery"),
+                tube_placement_en = ff_label(tube_placement_en, "Usual procedure for placing enteral feeding tubes"),
+                checking_position_en = ff_label(checking_position_en, "Checking the position of enteral feeding tubes"),
+                pattern_en = ff_label(pattern_en, "Pattern of EN delivery"),
+                frequency_changing_en = ff_label(frequency_changing_en, "Frequency of changing enteral feeding tubes"),
                 feed_tolerance_en = ff_label(feed_tolerance_en, "Usual frequency of assessing enteral feed tolerance"),
                 method_tolerance_en = ff_label(method_tolerance_en, "Usual method of assessing enteral feed tolerance"),
-                optimise_en = ff_label(optimise_en, "Usual method of optimising enteral nutrition"),
-                freq_monitor_en = ff_label(freq_monitor_en, "Usual frequency of monitoring enteral nutrition support"),
-                methods_monitoring_en = ff_label(methods_monitoring_en, "Usual methods of monitoring enteral nutrition support"),
-                protocol_ons = ff_label(protocol_ons, "Does the ICU have a protocol for the use of oral nutrition supplements?"),
+                optimise_en = ff_label(optimise_en, "Usual method of optimising EN"),
+                freq_monitor_en = ff_label(freq_monitor_en, "Frequency of monitoring EN"),
+                methods_monitoring_en = ff_label(methods_monitoring_en, "Methods of monitoring EN"),
+                protocol_ons = ff_label(protocol_ons, "Protocol for ONS use"),
                 rationale_ons = ff_label(rationale_ons, "Usual rationale for use of oral nutrition supplements"),
                 tolerance_ons = ff_label(tolerance_ons, "Frequency of assessment of tolerance and patient acceptability"),
-                basis_pn = ff_label(basis_pn, "What is the basis for parenteral nutrition support decision making?"),
-                timing_pn = ff_label(timing_pn, "Indicate the usual timing of parenteral nutrition support initiation"),
-                rationale_pn = ff_label(rationale_pn, "Usual rationale for parenteral nutrition use"),
-                vascular_access_pn = ff_label(vascular_access_pn, "Indicate most commonly used vascular access for parentral nutrition delivery"),
-                biochem_pn = ff_label(biochem_pn, "Usual frequency of biochemical monitoring of parenteral nutrition safety and tolerance"),
-                monitoring_pn = ff_label(monitoring_pn, "Usual methods of monitoring parenteral nutrition support"),
-                competence = ff_label(competence, "How competent/skilled do you consider yourself in nutrition support?"),
-                formal_nutr_educ = ff_label(formal_nutr_educ, "Have you had any formal nutrition education or training?"),
+                basis_pn = ff_label(basis_pn, "Basis for PN decision making?"),
+                timing_pn = ff_label(timing_pn, "Usual timing of PN initiation"),
+                rationale_pn = ff_label(rationale_pn, "Rationale for PN use"),
+                vascular_access_pn = ff_label(vascular_access_pn, "Commonly used vascular access for PN delivery"),
+                biochem_pn = ff_label(biochem_pn, "Frequency of biochemical monitoring of PN safety and tolerance"),
+                monitoring_pn = ff_label(monitoring_pn, "Methods of monitoring PN"),
+                competence = ff_label(competence, "Competence in nutrition support?"),
+                formal_nutr_educ = ff_label(formal_nutr_educ, "Formal nutrition education or training"),
                 source_info = ff_label(source_info, "Main source of information for nutrition support"),
                 other_info = ff_label(other_info, "Source of information (others)"),
                  profession_doctor_nurse = ff_label(profession_doctor_nurse, "Doctor/Nurse"),
-                years_working_icu_factor = ff_label(years_working_icu_factor, "How many years have you been working in the ICU?"),
+                years_working_icu_factor = ff_label(years_working_icu_factor, "Years of working in ICU"),
                 years_experience_factor = ff_label(years_experience_factor ,"Years of professional experience")
         )
 ```

@@ -59,7 +59,8 @@ decision <- import(here("data","decision_merge.RData"))
 demographics%>%
   select(-nutrition_support_team)%>%
         tbl_summary(
-          missing_text ="No response"
+          missing_text ="No response",
+          type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Characteristics of participants**")%>%
         bold_labels()
@@ -75,7 +76,8 @@ t2 <- nutrition_assessment%>%
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing_text = "No response"
+          missing_text = "No response",
+          type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Nutrition screening and assessment**")%>%
         bold_labels()
@@ -91,7 +93,8 @@ t3 <- decision%>%
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing_text = "No response"
+          missing_text = "No response",
+          type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Nutrition support decision making**")%>%
         bold_labels()
@@ -111,7 +114,8 @@ t4 <- en%>%
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing_text = "No response"
+          missing_text = "No response",
+          type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Enteral nutrition support practices**")%>%
         bold_labels()
@@ -125,7 +129,8 @@ t5<- ons%>%select(-c(
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing_text = "No response"
+          missing_text = "No response",
+          type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Oral nutrition support practices**")%>%
         bold_labels()
@@ -140,7 +145,8 @@ t6 <- pn%>%select(-c(
                 profession_doctor_nurse
         ))%>%
         tbl_summary(
-          missing_text = "No response"
+          missing_text = "No response",
+          type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Parenteral nutrition support practices**")%>%
         bold_labels()
@@ -161,7 +167,8 @@ t7 <- skills%>%
                 other_info
         ))%>%
         tbl_summary(
-          missing_text = "No response"
+          missing_text = "No response",
+          type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Skills and training**")%>%
         bold_labels()
@@ -187,7 +194,8 @@ t8 <- nutrition_assessment%>%
         ))%>%
         tbl_summary(
                 by = profession_doctor_nurse,
-                missing = "no"
+                missing_text = "No response",
+                type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Nutrition screening and assessment by profession**")%>%
         bold_labels()%>%
@@ -205,7 +213,8 @@ t9 <- decision%>%
         ))%>%
         tbl_summary(
                 by = profession_doctor_nurse,
-                missing = "no"
+                missing_text = "No response",
+                type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Nutrition support decision making by profession**")%>%
         bold_labels()%>%
@@ -223,7 +232,8 @@ t10 <- en%>%
         ))%>%
         tbl_summary(
                 by = profession_doctor_nurse,
-                missing = "no"
+                missing_text = "No response",
+                type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Enteral nutrition support practices by profession**")%>%
         bold_labels()%>%
@@ -241,7 +251,8 @@ t11 <- ons%>%
         ))%>%
         tbl_summary(
                 by = profession_doctor_nurse,
-                missing = "no"
+                missing_text = "No response",
+                type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Oral nutrition support practices by profession**")%>%
         bold_labels()%>%
@@ -260,7 +271,8 @@ t12 <- pn%>%
         ))%>%
         tbl_summary(
                 by = profession_doctor_nurse,
-                missing = "no"
+                missing_text = "No response",
+                type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Parenteral nutrition support practices by profession**")%>%
         bold_labels()%>%
@@ -284,7 +296,8 @@ t13 <- skills%>%
         ))%>%
         tbl_summary(
                 by = profession_doctor_nurse,
-                missing = "no"
+                missing_text = "No response",
+                type = all_dichotomous() ~ "categorical"
         )%>%
         modify_caption("**Skills and training by profession**")%>%
         bold_labels()%>%

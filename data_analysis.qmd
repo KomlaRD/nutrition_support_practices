@@ -321,6 +321,26 @@ t13
 ```
 
 
+## Plots
+
+```{r nutrition-asessment}
+plot_one <- ggplot(data = nutrition_assessment, aes(nutrition_assessment)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Routine practice of screening or assessment", x="Nutrition assessment", y="Frequency") +  theme_ggstatsplot() +
+  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_two <- ggplot(data = nutrition_assessment, aes(profession_assessment), fill = profession_assessment) +
+  geom_bar(position = "dodge") +
+  labs(title = "Professional who performs assessment", x="Profession", y="Frequency") +  theme_ggstatsplot() + 
+  scale_x_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'NA')) +
+  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_one <- plot_one + coord_flip()
+plot_two <- plot_two + coord_flip()
+plot_one / plot_two
+```
+
+
 ```{r plot-competence, eval=FALSE}
 ggplot(data = skills, aes(competence)) +
   geom_bar() +

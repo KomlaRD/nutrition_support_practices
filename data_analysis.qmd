@@ -341,6 +341,37 @@ plot_one / plot_two
 ```
 
 
+```{r nutrition-decision-making}
+plot_three <- ggplot(data = decision, aes(nutrition_protocol)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") +  theme_ggstatsplot() +
+  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_four <- ggplot(data = decision, aes(fluid_volume_decision)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Determination of fluid volume", x="Profession", y="Frequency") +  theme_ggstatsplot() + 
+  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_five <- ggplot(data = decision, aes(decide_route)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") +  theme_ggstatsplot() +
+  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_six <- ggplot(data = decision, aes(nutrition_support_team)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Formal nutrition support team", x="Profession", y="Frequency") +  theme_ggstatsplot() + 
+  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+plot_three <- plot_three + coord_flip()
+plot_four <- plot_four + coord_flip()
+plot_five <- plot_five + coord_flip()
+plot_six <- plot_six + coord_flip()
+
+plot_three / plot_four / plot_five / plot_six 
+```
+
+
 ```{r plot-competence, eval=FALSE}
 ggplot(data = skills, aes(competence)) +
   geom_bar() +

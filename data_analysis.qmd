@@ -26,7 +26,7 @@ pacman::p_load(
         forcats, # Working with factors
         ggthemes, # Themes
         questionr, # Multiple choice questions
-        broom
+        patchwork # Combine plots
 )
 ```
 
@@ -157,6 +157,14 @@ tbl_stack(list(t4,t5, t6), group_header = c("Enteral nutrition support practices
 ```
 
 
+```{r enteral-nutrition-table-only}
+t4
+```
+
+```{r parenteral-nutrition-table-only}
+t6
+```
+
 ```{r skills-training, eval=FALSE}
 t7 <- skills%>%
         select(-c(
@@ -239,6 +247,8 @@ t10 <- en%>%
         bold_labels()%>%
         add_p()%>%
         bold_p()%>%add_overall()
+
+t10
 ```
 
 
@@ -258,6 +268,8 @@ t11 <- ons%>%
         bold_labels()%>%
         add_p()%>%
         bold_p()%>%add_overall()
+
+t11
 ```
 
 
@@ -278,6 +290,8 @@ t12 <- pn%>%
         bold_labels()%>%
         add_p()%>%
         bold_p()%>%add_overall()
+
+t12
 ```
 
 ```{r tbl-stack-nsp}
@@ -391,5 +405,166 @@ freq_monitoring_pn <- multi.table(monitoring_pn)
 
 ```{r barplot, eval = FALSE}
 barplot(multitab[[1]], names.arg = row.names(multitab), main = "What nutrition screening/assessment methods or tools are used?", xlab = "Responses", ylab = "Frequency")
+```
+
+
+```{r mcq-nutrition-tools}
+# Data split
+tools_split <- nss %>%
+  separate_rows(nutrition_tools, sep = ";")
+
+# Split column into multiple rows
+nutrition_tools_frequency <- tools_split %>% 
+  group_by(nutrition_tools) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+# Create bar chart using ggplot2
+p1 <- ggplot(nutrition_tools_frequency, aes( x = nutrition_tools, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Nutrition screening or assessment tools", y = "Frequency", title = "Nutrition screening or assessment methods used in the ICU")
+
+p1 + coord_flip()
+```
+
+
+
+```{r mcq-nutrition-requirements}
+# Data split
+req_split <- nss %>%
+  separate_rows(nutrition_requirement, sep = ";")
+
+# Split column into multiple rows
+nutrition_req_frequency <- req_split %>% 
+  group_by(nutrition_requirement) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+# Create bar chart using ggplot2
+p2 <- ggplot(nutrition_req_frequency, aes( x = nutrition_requirement, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Methods for estimating nutrition requirement", y = "Frequency", title = "Usual method for estimating nutrition requirement in the ICU")
+
+p2 + coord_flip()
+```
+
+
+```{r mcq-en}
+# Data split
+commence_en_split <- nss %>%
+  separate_rows(commence_en, sep = ";")
+
+basis_en_split <- nss %>%
+  separate_rows(basis_en, sep = ";")
+
+feed_tolerance_split <- nss %>%
+  separate_rows(feed_tolerance_en, sep = ";")
+
+monitoring_en_split <- nss %>%
+  separate_rows(methods_monitoring_en, sep = ";")
+
+
+# Split column into multiple rows
+commence_en_frequency <- commence_en_split %>% 
+  group_by(commence_en) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+basis_en_frequency <- basis_en_split %>% 
+  group_by(basis_en) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+monitoring_en_frequency <- monitoring_en_split %>% 
+  group_by(methods_monitoring_en) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+feed_tolerance_frequency <- feed_tolerance_split %>% 
+  group_by(feed_tolerance_en) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+# Create bar chart using ggplot2
+p3 <- ggplot(commence_en_frequency, aes( x = commence_en, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Criteria to commence EN", y = "Frequency", title = "Criteria to commence EN in the ICU")
+
+p4 <- ggplot(basis_en_frequency, aes( x = basis_en, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Basis for EN decision", y = "Frequency", title = "Basis for EN decision")
+
+p5 <- ggplot(monitoring_en_frequency, aes( x = methods_monitoring_en, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Monitoring EN", y = "Frequency", title = "Methods for monitoring EN")
+
+p6 <- ggplot(feed_tolerance_frequency, aes( x = feed_tolerance_en, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Methods for feed tolerance", y = "Frequency", title = "Methods for monitoring feed tolerance in the ICU")
+
+
+# Horizontal bar charts
+
+p3 <- p3 + coord_flip()
+p4 <- p4 + coord_flip()
+p5 <- p5 + coord_flip()
+p6 <- p6 + coord_flip()
+
+
+# Combine charts
+
+p3 / p4 / p5 / p6
+```
+
+
+```{r mcq-pn}
+# Data split
+commence_pn_split <- nss %>%
+  separate_rows(commence_pn, sep = ";")
+
+timing_pn_split <- nss %>%
+  separate_rows(timing_pn, sep = ";")
+
+mpn_split <- nss %>%
+  separate_rows(monitoring_pn, sep = ";")
+
+# Split column into multiple rows
+commence_pn_frequency <- commence_pn_split %>% 
+  group_by(commence_pn) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+timing_pn_frequency <- timing_pn_split %>% 
+  group_by(timing_pn) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+monitoring_pn_frequency <- mpn_split %>% 
+  group_by(monitoring_pn) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+# Create bar chart using ggplot2
+p7 <- ggplot(commence_pn_frequency, aes( x = commence_pn, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Commence pn", y = "Frequency", title = "Criteria to commence pn")
+
+p8 <- ggplot(timing_pn_frequency, aes( x = timing_pn, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Timing pn", y = "Frequency", title = "Timing of PN")
+
+p9 <- ggplot(monitoring_pn_frequency, aes( x = monitoring_pn, y = n)) +
+  geom_bar(stat = "identity") +
+  labs (x = "Monitoring pn", y = "Frequency", title = "Methods for monitoring PN")
+
+
+# Horizontal bar charts
+p7 <- p7 + coord_flip()
+p8 <- p8 + coord_flip()
+p9 <- p9 + coord_flip()
+
+# Combine bar charts
+
+p7 / p8 / p9
 ```
 

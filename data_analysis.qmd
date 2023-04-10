@@ -363,7 +363,7 @@ full_plot <- plot_one / plot_two
 full_plot
 
 # Save plot
-ggsave("screening_plot.pdf", full_plot, width = 12, height = 10, dpi = 600)
+ggsave("screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 600)
 ```
 
 
@@ -456,7 +456,7 @@ nutrition_tools_frequency <- tools_split %>%
 
 # Create bar chart using ggplot2
 p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
-  geom_bar(stat = "identity", fill = "black") +
+  geom_bar(stat = "identity", fill = "#0072B2") +
   labs(y = "Nutrition screening or assessment tools", x = "Frequency", 
        title = "Nutrition screening or assessment methods used in the ICU") +
   geom_text(aes(label = n), nudge_x = 0.7, size = 4) +
@@ -465,7 +465,7 @@ p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
-        axis.line = element_line(color = "black"),
+        axis.line = element_line(color = "#0072B2"),
         axis.text = element_text(color = "black", size = 11),
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
@@ -507,6 +507,40 @@ p2 <- ggplot(nutrition_req_frequency, aes( x = nutrition_requirement, y = n)) +
   labs (x = "Methods for estimating nutrition requirement", y = "Frequency", title = "Usual method for estimating nutrition requirement in the ICU")
 
 p2 + coord_flip()
+```
+
+
+```{r}
+# Data split
+req_split <- nss %>%
+  separate_rows(nutrition_requirement, sep = ";")
+
+# Split column into multiple rows
+nutrition_req_frequency <- req_split %>% 
+  group_by(nutrition_requirement) %>%
+  summarise(n = n ()) %>%
+  ungroup()
+
+# Create bar chart using ggplot2
+p2 <- ggplot(nutrition_req_frequency, aes(y = nutrition_requirement, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Methods for estimating nutrition requirement", x = "Frequency", title = "Usual method for estimating nutrition requirement in the ICU") + 
+   scale_y_discrete(labels=c( 'Body weight-based methods', 'Clinical judgement', "Don't know",  'Published guidelines', "Predictive equations", "Illness severity", "Indirect calorimetry" )) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+
+p2 
+
+# Save plot
+ggsave("nutrition_requirements_plot.pdf", p2, width = 10, height = 5, dpi = 600)
 ```
 
 

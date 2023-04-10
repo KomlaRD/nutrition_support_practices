@@ -1,6 +1,6 @@
 ---
 title: "Nutrition support practices- Data analysis"
-author: "Eric Anku, Dr. Lamptey Samad, George Akafity, Sarah Amoo, Dr. Lauren Hill"
+author: "Eric Anku"
 format: docx
 ---
 
@@ -363,7 +363,7 @@ full_plot <- plot_one / plot_two
 full_plot
 
 # Save plot
-ggsave("screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 600)
+ggsave("figures/screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 600)
 ```
 
 
@@ -426,7 +426,7 @@ final_plot <- ggplot2::ggplot() +
 final_plot
 
 # Save plot
-ggsave("decision_plot.pdf", final_plot, width = 18, height = 10, dpi = 600)
+ggsave("figures/decision_plot.pdf", final_plot, width = 18, height = 10, dpi = 600)
 ```
 
 
@@ -458,7 +458,8 @@ nutrition_tools_frequency <- tools_split %>%
 p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2") +
   labs(y = "Nutrition screening or assessment tools", x = "Frequency", 
-       title = "Nutrition screening or assessment methods used in the ICU") +
+       title = "Nutrition screening or assessment methods used in the ICU",
+       caption = "SGA=Subjective Global Assessment, NRS2002 = Nutrition risk screening, NUTRIC = Nutrition risk in critically ill, MUST = Malnutrition universal screening tool, ABCDE = Combination of anthropometry, biochemical, clinical, dietary and environmental assessment, BMI = Body mass index") +
   geom_text(aes(label = n), nudge_x = 0.7, size = 4) +
   scale_y_discrete(labels=c( "BMI/Body weight assessment", "ABCDE approach", "Don't know",'MUST', 'NUTRIC', 'NRS2002', 'SGA')) +
   theme_bw(base_size = 12) +
@@ -470,7 +471,8 @@ p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
+        theme(plot.margin = unit(c(1, 5, 1, 5), "lines")) # adjust the margin to increase the width of the plotting area
 
 # Customize the legend
 legend_title <- "Frequency"
@@ -483,10 +485,10 @@ p1 <- p1 + theme(legend.position = "bottom",
                     name = legend_title,
                     labels = legend_labels)
 
-p1
+p1 
 
 # Save plot
-ggsave("nutrition_tools_plot.pdf", p1, width = 10, height = 5, dpi = 600)
+ggsave("figures/nutrition_tools_plot.pdf", p1, width = 19, height = 5, dpi = 600)
 ```
 
 
@@ -520,7 +522,7 @@ p2 <- ggplot(nutrition_req_frequency, aes(y = nutrition_requirement, x = n)) +
 p2 
 
 # Save plot
-ggsave("nutrition_requirements_plot.pdf", p2, width = 10, height = 5, dpi = 600)
+ggsave("figures/nutrition_requirements_plot.pdf", p2, width = 10, height = 5, dpi = 600)
 ```
 
 
@@ -641,10 +643,10 @@ p5
 p6
 
 # Save plot
-ggsave("criteria_en.pdf", p3, width = 10, height = 5, dpi = 600)
-ggsave("basis_en.pdf", p4, width = 10, height = 5, dpi = 600)
-ggsave("monitoring_en.pdf", p5, width = 10, height = 5, dpi = 600)
-ggsave("feed_tolerance.pdf", p6, width = 10, height = 5, dpi = 600)
+ggsave("figures/criteria_en.pdf", p3, width = 10, height = 5, dpi = 600)
+ggsave("figures/basis_en.pdf", p4, width = 10, height = 5, dpi = 600)
+ggsave("figures/monitoring_en.pdf", p5, width = 10, height = 5, dpi = 600)
+ggsave("figures/feed_tolerance.pdf", p6, width = 10, height = 5, dpi = 600)
 ```
 
 
@@ -691,7 +693,7 @@ monitoring_pn_frequency <- monitoring_pn_frequency%>%
 p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Commence pn", x = "Frequency", title = "Criteria to commence pn") +
+  labs (y = "Commence PN", x = "Frequency", title = "Criteria to commence PN") +
   scale_y_discrete(labels=c( 'Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Oben abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -719,14 +721,11 @@ p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
         plot.subtitle = element_text(hjust = 0.5, size = 12),
         plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
 
-p9 <- ggplot(monitoring_pn_frequency, aes( x = monitoring_pn, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Monitoring pn", y = "Frequency", title = "Methods for monitoring PN")
 
 p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Monitoring pn", x = "Frequency", title = "Methods for monitoring pn") +
+  labs (y = "Monitoring PN", x = "Frequency", title = "Methods for monitoring PN") +
   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with compliance rate", "No response/Null responses")) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -745,8 +744,8 @@ p8
 p9
 
 # Save plot
-ggsave("figures/criteria_en.pdf", p7, width = 10, height = 5, dpi = 600)
-ggsave("figures/basis_en.pdf", p8, width = 10, height = 5, dpi = 600)
-ggsave("figures/monitoring_en.pdf", p9, width = 10, height = 5, dpi = 600)
+ggsave("figures/commence_en.pdf", p7, width = 10, height = 5, dpi = 600)
+ggsave("figures/timing_pn.pdf", p8, width = 10, height = 5, dpi = 600)
+ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
 ```
 

@@ -318,41 +318,73 @@ t13
 
 ```{r nutrition-asessment}
 # Routine screening or nutrition assessment
-plot_one <- ggplot(data = nutrition_assessment, aes(y = nutrition_assessment)) +
-  geom_bar(position = "dodge", width = 0.5) +
-  geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
+# plot_one <- ggplot(data = nutrition_assessment, aes(y = nutrition_assessment)) +
+#   geom_bar(position = "dodge", width = 0.5) +
+#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
+#   labs(title = "Routine practice of nutrition screening or assessment", x="Frequency", y="Screening or assessment") +
+#   scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
+#   facet_wrap(~ profession_doctor_nurse) + 
+#   theme_bw(base_size = 12) + 
+#   theme(panel.grid.major = element_blank(), 
+#         panel.grid.minor = element_blank(),
+#         strip.background = element_blank(),
+#         axis.line = element_line(colour = "black"),
+#         axis.text = element_text(size = 10),
+#         axis.title = element_text(size = 12, face = "bold"))
+
+plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
+  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+   geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
   labs(title = "Routine practice of nutrition screening or assessment", x="Frequency", y="Screening or assessment") +
   scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
-  facet_wrap(~ profession_doctor_nurse) + 
-  theme_bw(base_size = 12) + 
-  theme(panel.grid.major = element_blank(), 
+  facet_wrap(~ profession_doctor_nurse) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.background = element_blank(),
-        axis.line = element_line(colour = "black"),
-        axis.text = element_text(size = 10),
-        axis.title = element_text(size = 12, face = "bold"))
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 # Profession who performs the assessment
-plot_two <- ggplot(data = nutrition_assessment, aes(y = profession_assessment), fill = profession_assessment) +
-  geom_bar(position = "dodge", width = 0.5) +
-  geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
+# plot_two <- ggplot(data = nutrition_assessment, aes(y = profession_assessment), fill = profession_assessment) +
+#   geom_bar(position = "dodge", width = 0.5) +
+#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
+#   labs(title = "Professional who performs nutrition screening or assessment", x="Frequency", y="Profession") + 
+#   scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
+#   facet_wrap(~ profession_doctor_nurse) + 
+#   theme_bw(base_size = 12) + 
+#   theme(panel.grid.major = element_blank(), 
+#         panel.grid.minor = element_blank(),
+#         strip.background = element_blank(),
+#         axis.line = element_line(colour = "black"),
+#         axis.text = element_text(size = 10),
+#         axis.title = element_text(size = 12, face = "bold"))
+
+plot_two <- ggplot(nutrition_assessment, aes(y = profession_assessment)) +
+  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+   geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
   labs(title = "Professional who performs nutrition screening or assessment", x="Frequency", y="Profession") + 
   scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
   facet_wrap(~ profession_doctor_nurse) + 
-  theme_bw(base_size = 12) + 
-  theme(panel.grid.major = element_blank(), 
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.background = element_blank(),
-        axis.line = element_line(colour = "black"),
-        axis.text = element_text(size = 10),
-        axis.title = element_text(size = 12, face = "bold"))
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 # Output plots
-plot_one <- plot_one + theme_pubr() 
-plot_two <- plot_two + theme_pubr()
+plot_one 
+plot_two 
 
 full_plot <- plot_one / plot_two
-full_plot
+
 
 # Save plot
 ggsave("figures/screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 600)
@@ -361,56 +393,113 @@ ggsave("figures/screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 60
 
 ```{r nutrition-decision-making}
 # Create plots
-plot_three <- ggplot(data = decision, aes(nutrition_protocol)) +
-  geom_bar(position = "dodge", width = 0.5) +
-  labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") +
-  theme_ggstatsplot() +
-  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-  facet_wrap(~ profession_doctor_nurse) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# plot_three <- ggplot(data = decision, aes(nutrition_protocol)) +
+#   geom_bar(position = "dodge", width = 0.5) +
+#   labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") +
+#   theme_ggstatsplot() +
+#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+#   facet_wrap(~ profession_doctor_nurse) +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-plot_four <- ggplot(data = decision, aes(fluid_volume_decision)) +
-  geom_bar(position = "dodge", width = 0.5) +
-  labs(title = "Determination of fluid volume", x="Profession", y="Frequency") +
-  theme_ggstatsplot() +
-  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-  facet_wrap(~ profession_doctor_nurse) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+plot_three <- ggplot(decision, aes(nutrition_protocol)) +
+  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+   geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
+  labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") + 
+  facet_wrap(~ profession_doctor_nurse) + 
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
-plot_five <- ggplot(data = decision, aes(decide_route)) +
-  geom_bar(position = "dodge", width = 0.5) +
-  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-  labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") +
-  theme_ggstatsplot() +
-  facet_wrap(~ profession_doctor_nurse) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# plot_four <- ggplot(data = decision, aes(fluid_volume_decision)) +
+#   geom_bar(position = "dodge", width = 0.5) +
+#   labs(title = "Determination of fluid volume", x="Profession", y="Frequency") +
+#   theme_ggstatsplot() +
+#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+#   facet_wrap(~ profession_doctor_nurse) +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-plot_six <- ggplot(data = decision, aes(nutrition_support_team)) +
-  geom_bar(position = "dodge", width = 0.5) +
-  labs(title = "Formal nutrition support team", x="Response", y="Frequency") +
-  theme_ggstatsplot() +
-  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-  facet_wrap(~ profession_doctor_nurse) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+plot_four <- ggplot(decision, aes(fluid_volume_decision)) +
+  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+   geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
+ labs(title = "Determination of fluid volume", x="Profession", y="Frequency") + 
+  facet_wrap(~ profession_doctor_nurse) + 
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
+
+# plot_five <- ggplot(data = decision, aes(decide_route)) +
+#   geom_bar(position = "dodge", width = 0.5) +
+#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+#   labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") +
+#   theme_ggstatsplot() +
+#   facet_wrap(~ profession_doctor_nurse) +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_five <- ggplot(decision, aes(decide_route)) +
+  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+   geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
+  labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") + 
+  facet_wrap(~ profession_doctor_nurse) + 
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
+
+
+# plot_six <- ggplot(data = decision, aes(nutrition_support_team)) +
+#   geom_bar(position = "dodge", width = 0.5) +
+#   labs(title = "Formal nutrition support team", x="Response", y="Frequency") +
+#   theme_ggstatsplot() +
+#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+#   facet_wrap(~ profession_doctor_nurse) +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_six <- ggplot(decision, aes(nutrition_support_team)) +
+  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+   geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
+   labs(title = "Formal nutrition support team", x="Response", y="Frequency") + 
+  facet_wrap(~ profession_doctor_nurse) + 
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 
 # Flip plots to horizontal
-plot_three <- plot_three + coord_flip() + theme_pubr()
-plot_four <- plot_four + coord_flip() + theme_pubr()
-plot_five <- plot_five + coord_flip() + theme_pubr()
-plot_six <- plot_six + coord_flip() + theme_pubr()
+plot_three <- plot_three + coord_flip() # theme_pubr()
+plot_four <- plot_four + coord_flip() # theme_pubr()
+plot_five <- plot_five + coord_flip() # theme_pubr()
+plot_six <- plot_six + coord_flip() # theme_pubr()
 
 # Combine plots and set layout
 combined_plots <- ggarrange(plot_three, plot_four, plot_five, plot_six, ncol = 2, nrow = 2, labels = c("A", "B", "C", "D"), common.legend = TRUE, legend = "bottom")
-
-# Add a caption
-caption <- "Fig 2A. Presence of nutrition protocol; Fig 2B. Determination of fluid volume; Fig 2C. Decision about route of nutrition support; Fig 2D. Presence of formal nutrition support team"
 
 # Add border and customize
 final_plot <- ggplot2::ggplot() +
               ggplot2::annotation_custom(grob = ggplot2::ggplotGrob(combined_plots), xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) +
               ggplot2::coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
-              ggplot2::labs(caption = caption) +
               ggplot2::theme_void() +
               ggplot2::theme(plot.margin = grid::unit(c(1, 1, 1, 1), "cm"))
 
@@ -513,7 +602,7 @@ p2 <- ggplot(nutrition_req_frequency, aes(y = nutrition_requirement, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 p2 
 
@@ -601,7 +690,7 @@ p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 
 p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
@@ -618,7 +707,7 @@ p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 p6 <- ggplot(feed_tolerance_frequency, aes(y = feed_tolerance_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
@@ -634,7 +723,7 @@ p6 <- ggplot(feed_tolerance_frequency, aes(y = feed_tolerance_en, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 p3
 p4
@@ -703,7 +792,7 @@ p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 
 p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
@@ -720,7 +809,7 @@ p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 
 p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
@@ -737,7 +826,7 @@ p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 # Output bar charts
 
@@ -746,7 +835,7 @@ p8
 p9
 
 # Save plot
-ggsave("figures/commence_en.pdf", p7, width = 10, height = 5, dpi = 600)
+ggsave("figures/commence_pn.pdf", p7, width = 10, height = 5, dpi = 600)
 ggsave("figures/timing_pn.pdf", p8, width = 10, height = 5, dpi = 600)
 ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
 ```

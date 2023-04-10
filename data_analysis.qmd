@@ -158,14 +158,6 @@ tbl_stack(list(t4,t5, t6), group_header = c("Enteral nutrition support practices
 ```
 
 
-```{r enteral-nutrition-table-only}
-t4
-```
-
-```{r parenteral-nutrition-table-only}
-t6
-```
-
 ```{r skills-training, eval=FALSE}
 t7 <- skills%>%
         select(-c(
@@ -448,6 +440,10 @@ ggplot(data = skills, aes(source_info)) +
 
 
 ```{r mcq-nutrition-tools}
+# Data split
+tools_split <- nss %>%
+  separate_rows(nutrition_tools, sep = ";")
+
 # Split column into multiple rows
 nutrition_tools_frequency <- tools_split %>% 
   group_by(nutrition_tools) %>%
@@ -578,7 +574,8 @@ p3 <- ggplot(commence_en_frequency, aes( y = commence_en, x = n)) +
 p3 <- ggplot(commence_en_frequency, aes(y = commence_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Criteria to commence EN", x = "Frequency", title = "Criteria to commence EN in the ICU") + 
+  labs (y = "Criteria to commence EN", x = "Frequency", title = "Criteria to commence EN in the ICU",
+        caption = "GIT=Gastrointestinal tract, GRV = Gastric residual volume, ICU = Intensive care unit") + 
   scale_y_discrete(labels=c( 'First day in the ICU', 'Haemodynamic stability', "Low GRV",  'Low intraabdominal pressure', "Presence of bowel sounds", "Reasonable GIT function", "Reasonable nutrition status", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -588,7 +585,7 @@ p3 <- ggplot(commence_en_frequency, aes(y = commence_en, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 
 p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
@@ -610,7 +607,8 @@ p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
 p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Monitoring EN", x = "Frequency", title = "Methods for monitoring EN") +
+  labs (y = "Monitoring EN", x = "Frequency", title = "Methods for monitoring EN",
+        caption = "EN = Enteral nutrition") +
   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with EN protocols', "Compliance with nutrition goals",  'Compliance with prescribed product', "Compliance with prescribed rate", "Not sure", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -625,7 +623,8 @@ p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
 p6 <- ggplot(feed_tolerance_frequency, aes(y = feed_tolerance_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Frequency of monitoring feed tolerance", x = "Frequency", title = "Frequency of monitoring feed tolerance") + 
+  labs (y = "Frequency of monitoring feed tolerance", x = "Frequency", title = "Frequency of monitoring feed tolerance",
+        caption = "EN = Enteral nutrition, ICU = Intensive care unit") + 
   scale_y_discrete(labels=c( 'Every 4-6 hours until EN is established', 'Every 4-6 hours throughout ICU stay', "Never", 'No standard', "Once daily", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -693,7 +692,8 @@ monitoring_pn_frequency <- monitoring_pn_frequency%>%
 p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Commence PN", x = "Frequency", title = "Criteria to commence PN") +
+  labs (y = "Commence PN", x = "Frequency", title = "Criteria to commence PN",
+        caption = "EN = Enteral nutrition, GIT = Gastrointestinal tract, ICU = Intensive care unit, GRV = Gastric residual volume") +
   scale_y_discrete(labels=c( 'Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Oben abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -709,7 +709,8 @@ p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
 p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Timing pn", x = "Frequency", title = "Timing of PN") +
+  labs (y = "Timing pn", x = "Frequency", title = "Timing of PN",
+        caption = "EN = Enteral nutrition") +
   scale_y_discrete(labels=c( 'After 7 days if EN unsuccessful', 'As soon as clinically indicated', "Immediately in malnourished patients", 'Within 24 hours of admission', "No standard", "Within 3 days if EN unsuccessful", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -725,7 +726,8 @@ p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
 p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Monitoring PN", x = "Frequency", title = "Methods for monitoring PN") +
+  labs (y = "Monitoring PN", x = "Frequency", title = "Methods for monitoring PN",
+        caption = "PN = Parenteral nutrition") +
   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with compliance rate", "No response/Null responses")) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),

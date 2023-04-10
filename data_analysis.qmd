@@ -26,7 +26,8 @@ pacman::p_load(
         forcats, # Working with factors
         ggthemes, # Themes
         questionr, # Multiple choice questions
-        patchwork # Combine plots
+        patchwork, # Combine plots
+        ggpubr
 )
 ```
 
@@ -324,20 +325,45 @@ t13
 ## Plots
 
 ```{r nutrition-asessment}
-plot_one <- ggplot(data = nutrition_assessment, aes(nutrition_assessment)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Routine practice of screening or assessment", x="Nutrition assessment", y="Frequency") +  theme_ggstatsplot() +
-  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# Routine screening or nutrition assessment
+plot_one <- ggplot(data = nutrition_assessment, aes(y = nutrition_assessment)) +
+  geom_bar(position = "dodge", width = 0.5) +
+  geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
+  labs(title = "Routine practice of nutrition screening or assessment", x="Frequency", y="Screening or assessment") +
+  scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
+  facet_wrap(~ profession_doctor_nurse) + 
+  theme_bw(base_size = 12) + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        strip.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12, face = "bold"))
 
-plot_two <- ggplot(data = nutrition_assessment, aes(profession_assessment), fill = profession_assessment) +
-  geom_bar(position = "dodge") +
-  labs(title = "Professional who performs assessment", x="Profession", y="Frequency") +  theme_ggstatsplot() + 
-  scale_x_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'NA')) +
-  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# Profession who performs the assessment
+plot_two <- ggplot(data = nutrition_assessment, aes(y = profession_assessment), fill = profession_assessment) +
+  geom_bar(position = "dodge", width = 0.5) +
+  geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
+  labs(title = "Professional who performs nutrition screening or assessment", x="Frequency", y="Profession") + 
+  scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
+  facet_wrap(~ profession_doctor_nurse) + 
+  theme_bw(base_size = 12) + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        strip.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12, face = "bold"))
 
-plot_one <- plot_one + coord_flip()
-plot_two <- plot_two + coord_flip()
-plot_one / plot_two
+# Output plots
+plot_one <- plot_one + theme_pubr() 
+plot_two <- plot_two + theme_pubr()
+
+full_plot <- plot_one / plot_two
+full_plot
+
+# Save plot
+ggsave("screening_plot.pdf", full_plot, width = 12, height = 10, dpi = 600)
 ```
 
 
@@ -369,6 +395,68 @@ plot_five <- plot_five + coord_flip()
 plot_six <- plot_six + coord_flip()
 
 plot_three / plot_four / plot_five / plot_six 
+```
+
+```{r}
+# Create plots
+plot_three <- ggplot(data = decision, aes(nutrition_protocol)) +
+  geom_bar(position = "dodge", width = 0.5) +
+  labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") +
+  theme_ggstatsplot() +
+  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+  facet_wrap(~ profession_doctor_nurse) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_four <- ggplot(data = decision, aes(fluid_volume_decision)) +
+  geom_bar(position = "dodge", width = 0.5) +
+  labs(title = "Determination of fluid volume", x="Profession", y="Frequency") +
+  theme_ggstatsplot() +
+  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+  facet_wrap(~ profession_doctor_nurse) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_five <- ggplot(data = decision, aes(decide_route)) +
+  geom_bar(position = "dodge", width = 0.5) +
+  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+  labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") +
+  theme_ggstatsplot() +
+  facet_wrap(~ profession_doctor_nurse) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_six <- ggplot(data = decision, aes(nutrition_support_team)) +
+  geom_bar(position = "dodge", width = 0.5) +
+  labs(title = "Formal nutrition support team", x="Response", y="Frequency") +
+  theme_ggstatsplot() +
+  geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
+  facet_wrap(~ profession_doctor_nurse) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+# Flip plots to horizontal
+plot_three <- plot_three + coord_flip() + theme_pubr()
+plot_four <- plot_four + coord_flip() + theme_pubr()
+plot_five <- plot_five + coord_flip() + theme_pubr()
+plot_six <- plot_six + coord_flip() + theme_pubr()
+
+# Combine plots and set layout
+combined_plots <- ggarrange(plot_three, plot_four, plot_five, plot_six, ncol = 2, nrow = 2, labels = c("A", "B", "C", "D"), common.legend = TRUE, legend = "bottom")
+
+# Add a caption
+caption <- "Fig 2A. Presence of nutrition protocol; Fig 2B. Determination of fluid volume; Fig 2C. Decision about route of nutrition support; Fig 2D. Presence of formal nutrition support team"
+
+# Add border and customize
+final_plot <- ggplot2::ggplot() +
+              ggplot2::annotation_custom(grob = ggplot2::ggplotGrob(combined_plots), xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) +
+              ggplot2::coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+              ggplot2::labs(caption = caption) +
+              ggplot2::theme_void() +
+              ggplot2::theme(plot.margin = grid::unit(c(1, 1, 1, 1), "cm"))
+
+# Output the final plot
+final_plot
+
+# Save plot
+ggsave("decision_plot.pdf", final_plot, width = 18, height = 10, dpi = 600)
 ```
 
 

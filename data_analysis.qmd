@@ -490,27 +490,7 @@ ggsave("nutrition_tools_plot.pdf", p1, width = 10, height = 5, dpi = 600)
 ```
 
 
-```{r mcq-nutrition-requirements}
-# Data split
-req_split <- nss %>%
-  separate_rows(nutrition_requirement, sep = ";")
-
-# Split column into multiple rows
-nutrition_req_frequency <- req_split %>% 
-  group_by(nutrition_requirement) %>%
-  summarise(n = n ()) %>%
-  ungroup()
-
-# Create bar chart using ggplot2
-p2 <- ggplot(nutrition_req_frequency, aes( x = nutrition_requirement, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Methods for estimating nutrition requirement", y = "Frequency", title = "Usual method for estimating nutrition requirement in the ICU")
-
-p2 + coord_flip()
-```
-
-
-```{r}
+```{r mcq-nutrient-requirement}
 # Data split
 req_split <- nss %>%
   separate_rows(nutrition_requirement, sep = ";")
@@ -581,34 +561,90 @@ feed_tolerance_frequency <- feed_tolerance_split %>%
   ungroup()
 
 # Create bar chart using ggplot2
-p3 <- ggplot(commence_en_frequency, aes( x = commence_en, y = n)) +
+p3 <- ggplot(commence_en_frequency, aes( y = commence_en, x = n)) +
   geom_bar(stat = "identity") +
-  labs (x = "Criteria to commence EN", y = "Frequency", title = "Criteria to commence EN in the ICU")
+  labs (y = "", x = "Frequency", title = "") +
+  theme_bw() + 
+  theme(plot.title = element_text(size = 14, face = "bold"), 
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10), 
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 12, face = "bold")) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1)))
 
-p4 <- ggplot(basis_en_frequency, aes( x = basis_en, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Basis for EN decision", y = "Frequency", title = "Basis for EN decision")
-
-p5 <- ggplot(monitoring_en_frequency, aes( x = methods_monitoring_en, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Monitoring EN", y = "Frequency", title = "Methods for monitoring EN")
-
-p6 <- ggplot(feed_tolerance_frequency, aes( x = feed_tolerance_en, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Methods for feed tolerance", y = "Frequency", title = "Methods for monitoring feed tolerance in the ICU")
-
-
-# Horizontal bar charts
-
-p3 <- p3 + coord_flip()
-p4 <- p4 + coord_flip()
-p5 <- p5 + coord_flip()
-p6 <- p6 + coord_flip()
+# Create bar chart using ggplot2
+p3 <- ggplot(commence_en_frequency, aes(y = commence_en, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Criteria to commence EN", x = "Frequency", title = "Criteria to commence EN in the ICU") + 
+  scale_y_discrete(labels=c( 'First day in the ICU', 'Haemodynamic stability', "Low GRV",  'Low intraabdominal pressure', "Presence of bowel sounds", "Reasonable GIT function", "Reasonable nutrition status", "No response" )) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
 
 
-# Combine charts
+p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Basis for EN decision", x = "Frequency", title = "Basis for EN decision") + 
+  scale_y_discrete(labels=c( 'Clinical judgment', 'Not sure', "Professional experience",  'Published guidelines' )) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
 
-p3 / p4 / p5 / p6
+
+p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Monitoring EN", x = "Frequency", title = "Methods for monitoring EN") +
+  scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with EN protocols', "Compliance with nutrition goals",  'Compliance with prescribed product', "Compliance with prescribed rate", "Not sure", "No response" )) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+
+p6 <- ggplot(feed_tolerance_frequency, aes(y = feed_tolerance_en, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Frequency of monitoring feed tolerance", x = "Frequency", title = "Frequency of monitoring feed tolerance") + 
+  scale_y_discrete(labels=c( 'Every 4-6 hours until EN is established', 'Every 4-6 hours throughout ICU stay', "Never", 'No standard', "Once daily", "No response" )) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+
+p3
+p4
+p5
+p6
+
+# Save plot
+ggsave("criteria_en.pdf", p3, width = 10, height = 5, dpi = 600)
+ggsave("basis_en.pdf", p4, width = 10, height = 5, dpi = 600)
+ggsave("monitoring_en.pdf", p5, width = 10, height = 5, dpi = 600)
+ggsave("feed_tolerance.pdf", p6, width = 10, height = 5, dpi = 600)
 ```
 
 
@@ -639,27 +675,78 @@ monitoring_pn_frequency <- mpn_split %>%
   summarise(n = n ()) %>%
   ungroup()
 
-# Create bar chart using ggplot2
-p7 <- ggplot(commence_pn_frequency, aes( x = commence_pn, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Commence pn", y = "Frequency", title = "Criteria to commence pn")
+# Transform very important response to NA
+monitoring_pn_frequency$monitoring_pn[monitoring_pn_frequency$monitoring_pn == "Very important"] <- NA
 
-p8 <- ggplot(timing_pn_frequency, aes( x = timing_pn, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Timing pn", y = "Frequency", title = "Timing of PN")
+# Combine to NA values
+monitoring_pn_frequency <- monitoring_pn_frequency%>%
+  group_by(monitoring_pn) %>%
+  summarise(n = sum(n, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(monitoring_pn = coalesce(monitoring_pn, "NA")) %>%
+  group_by(monitoring_pn) %>%
+  summarise(n = sum(n))
+
+# Create bar chart using ggplot2
+p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Commence pn", x = "Frequency", title = "Criteria to commence pn") +
+  scale_y_discrete(labels=c( 'Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Oben abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response" )) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
+
+
+p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Timing pn", x = "Frequency", title = "Timing of PN") +
+  scale_y_discrete(labels=c( 'After 7 days if EN unsuccessful', 'As soon as clinically indicated', "Immediately in malnourished patients", 'Within 24 hours of admission', "No standard", "Within 3 days if EN unsuccessful", "No response" )) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
 
 p9 <- ggplot(monitoring_pn_frequency, aes( x = monitoring_pn, y = n)) +
   geom_bar(stat = "identity") +
   labs (x = "Monitoring pn", y = "Frequency", title = "Methods for monitoring PN")
 
+p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
+  labs (y = "Monitoring pn", x = "Frequency", title = "Methods for monitoring pn") +
+  scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with compliance rate", "No response/Null responses")) +
+  theme_pubclean() +  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
 
-# Horizontal bar charts
-p7 <- p7 + coord_flip()
-p8 <- p8 + coord_flip()
-p9 <- p9 + coord_flip()
+# Output bar charts
 
-# Combine bar charts
+p7 
+p8
+p9
 
-p7 / p8 / p9
+# Save plot
+ggsave("figures/criteria_en.pdf", p7, width = 10, height = 5, dpi = 600)
+ggsave("figures/basis_en.pdf", p8, width = 10, height = 5, dpi = 600)
+ggsave("figures/monitoring_en.pdf", p9, width = 10, height = 5, dpi = 600)
 ```
 

@@ -55,12 +55,12 @@ The other source of nutrition information had 2 responses. One response indicate
 Doctor and pharmacist were collectively categorised as doctors and general and critical care nurses were categorised as nurses in the professional group used for the sub-group analysis.
 
 
-```{r glimpse-data}
+```{r glimpse-dataset-one}
 # Assess dataset
 glimpse(df)
 ```
 
-```{r glimpse-data}
+```{r glimpse-dataset-two}
 glimpse(df_two)
 ```
 
@@ -615,7 +615,7 @@ merge_nss <- merge_nss%>%
                 vascular_access_pn = ff_label(vascular_access_pn, "Commonly used vascular access for PN delivery"),
                 biochem_pn = ff_label(biochem_pn, "Frequency of biochemical monitoring of PN safety and tolerance"),
                 monitoring_pn = ff_label(monitoring_pn, "Methods of monitoring PN"),
-                competence = ff_label(competence, "Competence in nutrition support?"),
+                competence = ff_label(competence, "Competence in nutrition support"),
                 formal_nutr_educ = ff_label(formal_nutr_educ, "Formal nutrition education or training"),
                 source_info = ff_label(source_info, "Main source of information for nutrition support"),
                 other_info = ff_label(other_info, "Source of information (others)"),
@@ -858,19 +858,16 @@ mcqs_merge <- merge_nss%>%
 ```
 
 
+```{r correct-en-response}
+# Correct response of method for optimising enteral nutrition
+
+en_merge$optimise_en[en_merge$optimise_en == "Above problems only applied when relevant problems with enteral feeding arise"] <- "Above solutions only applied when relevant problems with enteral feeding arise"
+```
+
+
 ```{r wrangle-skills-training}
 # Convert Others: Literature to Journal articles for source of information
 skills_merge$source_info <- replace(skills_merge$source_info, 13, "Journal articles")
-
-
-# Convert Others: Media to Media under source of information
-#levels(skills$source_info)[levels(skills$source_info) == "Other"] <- "Media"
-
-# Remove Other source of information from dataframe (skills)
-# skills <- skills%>%
-#         select(
-#         -c(other_info)
-# )
 ```
 
 ```{r export-datasets-csv}

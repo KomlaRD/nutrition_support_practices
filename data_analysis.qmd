@@ -368,36 +368,6 @@ ggsave("screening_plot.pdf", full_plot, width = 12, height = 10, dpi = 600)
 
 
 ```{r nutrition-decision-making}
-plot_three <- ggplot(data = decision, aes(nutrition_protocol)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") +  theme_ggstatsplot() +
-  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-plot_four <- ggplot(data = decision, aes(fluid_volume_decision)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Determination of fluid volume", x="Profession", y="Frequency") +  theme_ggstatsplot() + 
-  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-plot_five <- ggplot(data = decision, aes(decide_route)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") +  theme_ggstatsplot() +
-  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-plot_six <- ggplot(data = decision, aes(nutrition_support_team)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Formal nutrition support team", x="Profession", y="Frequency") +  theme_ggstatsplot() + 
-  facet_wrap(~ profession_doctor_nurse) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
-plot_three <- plot_three + coord_flip()
-plot_four <- plot_four + coord_flip()
-plot_five <- plot_five + coord_flip()
-plot_six <- plot_six + coord_flip()
-
-plot_three / plot_four / plot_five / plot_six 
-```
-
-```{r}
 # Create plots
 plot_three <- ggplot(data = decision, aes(nutrition_protocol)) +
   geom_bar(position = "dodge", width = 0.5) +
@@ -478,10 +448,6 @@ ggplot(data = skills, aes(source_info)) +
 
 
 ```{r mcq-nutrition-tools}
-# Data split
-tools_split <- nss %>%
-  separate_rows(nutrition_tools, sep = ";")
-
 # Split column into multiple rows
 nutrition_tools_frequency <- tools_split %>% 
   group_by(nutrition_tools) %>%
@@ -489,13 +455,39 @@ nutrition_tools_frequency <- tools_split %>%
   ungroup()
 
 # Create bar chart using ggplot2
-p1 <- ggplot(nutrition_tools_frequency, aes( x = nutrition_tools, y = n)) +
-  geom_bar(stat = "identity") +
-  labs (x = "Nutrition screening or assessment tools", y = "Frequency", title = "Nutrition screening or assessment methods used in the ICU")
+p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
+  geom_bar(stat = "identity", fill = "black") +
+  labs(y = "Nutrition screening or assessment tools", x = "Frequency", 
+       title = "Nutrition screening or assessment methods used in the ICU") +
+  geom_text(aes(label = n), nudge_x = 0.7, size = 4) +
+  scale_y_discrete(labels=c( "BMI/Body weight assessment", "ABCDE approach", "Don't know",'MUST', 'NUTRIC', 'NRS2002', 'SGA')) +
+  theme_bw(base_size = 12) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "gray50"))
 
-p1 + coord_flip()
+# Customize the legend
+legend_title <- "Frequency"
+legend_labels <- c("Nutrition screening or assessment tools")
+p1 <- p1 + theme(legend.position = "bottom",
+                  legend.text = element_text(size = 11),
+                  legend.title = element_text(size = 12, face = "bold"),
+                  legend.key.size = unit(1.5, "lines")) +
+  scale_fill_manual(values = "black",
+                    name = legend_title,
+                    labels = legend_labels)
+
+p1
+
+# Save plot
+ggsave("nutrition_tools_plot.pdf", p1, width = 10, height = 5, dpi = 600)
 ```
-
 
 
 ```{r mcq-nutrition-requirements}

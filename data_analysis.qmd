@@ -99,6 +99,8 @@ t3 <- decision%>%
         )%>%
         modify_caption("**Nutrition support decision making**")%>%
         bold_labels()
+
+t3
 ```
 
 ```{r tbl-stack-one, eval=FALSE}
@@ -221,6 +223,8 @@ t9 <- decision%>%
         bold_labels()%>%
         add_p()%>%
         bold_p()%>%add_overall()
+
+t9
 ```
 
 
@@ -335,7 +339,7 @@ t13
 plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
    geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
-  labs(title = "Routine practice of nutrition screening or assessment", x="Frequency", y="Screening or assessment") +
+  labs(title = "Routine practice of nutrition screening or assessment", x="Respondents", y="Screening or assessment") +
   scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
   facet_wrap(~ profession_doctor_nurse) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -366,7 +370,7 @@ plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
 plot_two <- ggplot(nutrition_assessment, aes(y = profession_assessment)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
    geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
-  labs(title = "Professional who performs nutrition screening or assessment", x="Frequency", y="Profession") + 
+  labs(title = "Professional who performs nutrition screening or assessment", x="Respondents", y="Profession") + 
   scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
   facet_wrap(~ profession_doctor_nurse) + 
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -404,7 +408,7 @@ ggsave("figures/screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 60
 plot_three <- ggplot(decision, aes(nutrition_protocol)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
    geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
-  labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") + 
+  labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Respondents") + 
   facet_wrap(~ profession_doctor_nurse) + 
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -427,7 +431,7 @@ plot_three <- ggplot(decision, aes(nutrition_protocol)) +
 plot_four <- ggplot(decision, aes(fluid_volume_decision)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
    geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
- labs(title = "Determination of fluid volume", x="Profession", y="Frequency") + 
+ labs(title = "Determination of fluid volume", x="Profession", y="Respondents") + 
   facet_wrap(~ profession_doctor_nurse) + 
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -450,7 +454,7 @@ plot_four <- ggplot(decision, aes(fluid_volume_decision)) +
 plot_five <- ggplot(decision, aes(decide_route)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
    geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
-  labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") + 
+  labs(title = "Route of nutrition support", x="Decision about route", y="Respondents") + 
   facet_wrap(~ profession_doctor_nurse) + 
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -474,7 +478,7 @@ plot_five <- ggplot(decision, aes(decide_route)) +
 plot_six <- ggplot(decision, aes(nutrition_support_team)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
    geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
-   labs(title = "Formal nutrition support team", x="Response", y="Frequency") + 
+   labs(title = "Formal nutrition support team", x="Response", y="Respondents") + 
   facet_wrap(~ profession_doctor_nurse) + 
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -542,7 +546,7 @@ nutrition_tools_frequency <- tools_split %>%
 # Create bar chart using ggplot2
 p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2") +
-  labs(y = "Nutrition screening or assessment tools", x = "Frequency", 
+  labs(y = "Nutrition screening or assessment tools", x = "Respondents", 
        title = "Nutrition screening or assessment methods used in the ICU",
        caption = "SGA=Subjective Global Assessment, NRS2002 = Nutrition risk screening, NUTRIC = Nutrition risk in critically ill, MUST = Malnutrition universal screening tool, ABCDE = Combination of anthropometry, biochemical, clinical, dietary and environmental assessment, BMI = Body mass index") +
   geom_text(aes(label = n), nudge_x = 0.7, size = 4) +
@@ -592,7 +596,7 @@ nutrition_req_frequency <- req_split %>%
 p2 <- ggplot(nutrition_req_frequency, aes(y = nutrition_requirement, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Methods for estimating nutrition requirement", x = "Frequency", title = "Usual method for estimating nutrition requirement in the ICU") + 
+  labs (y = "Methods for estimating nutrition requirement", x = "Respondents", title = "Usual method for estimating nutrition requirement in the ICU") + 
    scale_y_discrete(labels=c( 'Body weight-based methods', 'Clinical judgement', "Don't know",  'Published guidelines', "Predictive equations", "Illness severity", "Indirect calorimetry" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -652,7 +656,7 @@ feed_tolerance_frequency <- feed_tolerance_split %>%
 p3 <- ggplot(commence_en_frequency, aes(y = commence_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Criteria to commence EN", x = "Frequency", title = "Criteria to commence EN in the ICU",
+  labs (y = "Criteria to commence EN", x = "Respondents", title = "Criteria to commence EN in the ICU",
         caption = "GIT=Gastrointestinal tract, GRV = Gastric residual volume, ICU = Intensive care unit") + 
   scale_y_discrete(labels=c( 'First day in the ICU', 'Haemodynamic stability', "Low GRV",  'Low intraabdominal pressure', "Presence of bowel sounds", "Reasonable GIT function", "Reasonable nutrition status", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -669,7 +673,7 @@ p3 <- ggplot(commence_en_frequency, aes(y = commence_en, x = n)) +
 p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Basis for EN decision", x = "Frequency", title = "Basis for EN decision") + 
+  labs (y = "Basis for EN decision", x = "Respondents", title = "Basis for EN decision") + 
   scale_y_discrete(labels=c( 'Clinical judgment', 'Not sure', "Professional experience",  'Published guidelines' )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -685,7 +689,7 @@ p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
 p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Monitoring EN", x = "Frequency", title = "Methods for monitoring EN",
+  labs (y = "Monitoring EN", x = "Respondents", title = "Methods for monitoring EN",
         caption = "EN = Enteral nutrition") +
   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with EN protocols', "Compliance with nutrition goals",  'Compliance with prescribed product', "Compliance with prescribed rate", "Not sure", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -701,7 +705,7 @@ p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
 p6 <- ggplot(feed_tolerance_frequency, aes(y = feed_tolerance_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Frequency of monitoring feed tolerance", x = "Frequency", title = "Frequency of monitoring feed tolerance",
+  labs (y = "Frequency of monitoring feed tolerance", x = "Respondents", title = "Frequency of monitoring feed tolerance",
         caption = "EN = Enteral nutrition, ICU = Intensive care unit") + 
   scale_y_discrete(labels=c( 'Every 4-6 hours until EN is established', 'Every 4-6 hours throughout ICU stay', "Never", 'No standard', "Once daily", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -770,7 +774,7 @@ monitoring_pn_frequency <- monitoring_pn_frequency%>%
 p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Commence PN", x = "Frequency", title = "Criteria to commence PN",
+  labs (y = "Commence PN", x = "Respondents", title = "Criteria to commence PN",
         caption = "EN = Enteral nutrition, GIT = Gastrointestinal tract, ICU = Intensive care unit, GRV = Gastric residual volume") +
   scale_y_discrete(labels=c( 'Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Oben abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -787,7 +791,7 @@ p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
 p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Timing pn", x = "Frequency", title = "Timing of PN",
+  labs (y = "Timing pn", x = "Respondents", title = "Timing of PN",
         caption = "EN = Enteral nutrition") +
   scale_y_discrete(labels=c( 'After 7 days if EN unsuccessful', 'As soon as clinically indicated', "Immediately in malnourished patients", 'Within 24 hours of admission', "No standard", "Within 3 days if EN unsuccessful", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -804,7 +808,7 @@ p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
 p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Monitoring PN", x = "Frequency", title = "Methods for monitoring PN",
+  labs (y = "Monitoring PN", x = "Respondents", title = "Methods for monitoring PN",
         caption = "PN = Parenteral nutrition") +
   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with compliance rate", "No response/Null responses")) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),

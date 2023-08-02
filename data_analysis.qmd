@@ -20,7 +20,7 @@ pacman::p_load(
         ggstatsplot, # Inferential plots
         here, # Working directory
         naniar, # Missing values
-        skimr, # Skim daataset
+        skimr, # Skim dataset
         psych, # Describe dataset
         lessR, # Multiple plots and statistical tests
         forcats, # Working with factors

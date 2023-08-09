@@ -656,7 +656,7 @@ feed_tolerance_frequency <- feed_tolerance_split %>%
 p3 <- ggplot(commence_en_frequency, aes(y = commence_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Criteria to commence EN", x = "Respondents", title = "Criteria to commence EN in the ICU",
+  labs (y = "Criteria to commence EN", x = "Respondents", title = "Criteria to commence EN (A)",
         caption = "GIT=Gastrointestinal tract, GRV = Gastric residual volume, ICU = Intensive care unit") + 
   scale_y_discrete(labels=c( 'First day in the ICU', 'Haemodynamic stability', "Low GRV",  'Low intraabdominal pressure', "Presence of bowel sounds", "Reasonable GIT function", "Reasonable nutrition status", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -689,7 +689,7 @@ p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
 p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Monitoring EN", x = "Respondents", title = "Methods for monitoring EN",
+  labs (y = "Monitoring EN", x = "Respondents", title = "Methods for monitoring EN (A)",
         caption = "EN = Enteral nutrition") +
   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with EN protocols', "Compliance with nutrition goals",  'Compliance with prescribed product', "Compliance with prescribed rate", "Not sure", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -774,7 +774,7 @@ monitoring_pn_frequency <- monitoring_pn_frequency%>%
 p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Commence PN", x = "Respondents", title = "Criteria to commence PN",
+  labs (y = "Commence PN", x = "Respondents", title = "Criteria to commence PN (B)",
         caption = "EN = Enteral nutrition, GIT = Gastrointestinal tract, ICU = Intensive care unit, GRV = Gastric residual volume") +
   scale_y_discrete(labels=c( 'Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Oben abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response" )) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -808,7 +808,7 @@ p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
 p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-  labs (y = "Monitoring PN", x = "Respondents", title = "Methods for monitoring PN",
+  labs (y = "Monitoring PN", x = "Respondents", title = "Methods for monitoring PN (B)",
         caption = "PN = Parenteral nutrition") +
   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with compliance rate", "No response/Null responses")) +
   theme_pubclean() +  theme(panel.grid.major = element_blank(),
@@ -831,5 +831,26 @@ p9
 ggsave("figures/commence_pn.pdf", p7, width = 10, height = 5, dpi = 600)
 ggsave("figures/timing_pn.pdf", p8, width = 10, height = 5, dpi = 600)
 ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
+```
+
+
+```{r combine-four-figures}
+# Combine the plots vertically using plot_grid
+combined_plot_criteria <- plot_grid(p3, p7, ncol = 1, align = "v")
+
+# Customize the appearance of the combined plot
+combined_plot_criteria <- combined_plot_criteria +
+  theme(plot.margin = margin(10, 10, 20, 10, "mm"))  # Adjust margins for spacing
+
+# Combine the plots vertically using plot_grid
+combined_plot_monitoring <- plot_grid(p5, p9, ncol = 1, align = "v")
+
+# Customize the appearance of the combined plot
+combined_plot_monitoring <- combined_plot_monitoring +
+  theme(plot.margin = margin(10, 10, 20, 10, "mm"))  # Adjust margins for spacing
+
+
+ggsave("figures/combined_plot_criteria.pdf", combined_plot_citeria, width = 10, height = 5, dpi = 600)
+ggsave("figures/combined_plot_monitoring.pdf", combined_plot_monitoring, width = 10, height = 5, dpi = 600)
 ```
 

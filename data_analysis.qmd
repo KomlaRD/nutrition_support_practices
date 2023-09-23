@@ -421,47 +421,6 @@ full_plot <- plot_one / plot_two
 ggsave("figures/screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 600)
 ```
 
-```{r nutrition-asessment}
-# Plots using counts
-# plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
-#   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
-#    geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
-#   labs(title = "Routine practice of nutrition screening or assessment", x="Respondents", y="Screening or assessment") +
-#   scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
-#   facet_wrap(~ profession_doctor_nurse) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# 
-# 
-# plot_two <- ggplot(nutrition_assessment, aes(y = profession_assessment)) +
-#   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
-#    geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
-#   labs(title = "Professional who performs nutrition screening or assessment", x="Respondents", y="Profession") +
-#   scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
-#   facet_wrap(~ profession_doctor_nurse) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-
-# # Output plots
-# plot_one 
-# plot_two 
-```
-
 
 ```{r nutrition-decision-making}
 plot_three <- ggplot(decision, aes(nutrition_protocol)) +
@@ -628,54 +587,6 @@ ggsave("figures/nutrition_tools_plot.pdf", p1, width = 19, height = 5, dpi = 600
 ```
 
 
-```{r mcq-nutrition-tools}
-# # Plot using counts
-# # Data split
-# tools_split <- nss %>%
-#   separate_rows(nutrition_tools, sep = ";")
-# 
-# # Split column into multiple rows
-# nutrition_tools_frequency <- tools_split %>% 
-#   group_by(nutrition_tools) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# # Create bar chart using ggplot2
-# p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2") +
-#   labs(y = "Nutrition screening or assessment tools", x = "Respondents", 
-#        title = "Nutrition screening or assessment methods used in the ICU",
-#        caption = "SGA=Subjective Global Assessment, NRS2002 = Nutrition risk screening, NUTRIC = Nutrition risk in critically ill, MUST = Malnutrition universal screening tool, ABCDE = Combination of anthropometry, biochemical, clinical, dietary and environmental assessment, BMI = Body mass index") +
-#   geom_text(aes(label = n), nudge_x = 0.7, size = 4) +
-#   scale_y_discrete(labels=c( "BMI/Body weight assessment", "ABCDE approach", "Don't know",'MUST', 'NUTRIC', 'NRS2002', 'SGA')) +
-#   theme_bw(base_size = 12) +
-#   theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-#         theme(plot.margin = unit(c(1, 5, 1, 5), "lines")) # adjust the margin to increase the width of the plotting area
-# 
-# # Customize the legend
-# legend_title <- "Frequency"
-# legend_labels <- c("Nutrition screening or assessment tools")
-# p1 <- p1 + theme(legend.position = "bottom",
-#                   legend.text = element_text(size = 11),
-#                   legend.title = element_text(size = 12, face = "bold"),
-#                   legend.key.size = unit(1.5, "lines")) +
-#   scale_fill_manual(values = "black",
-#                     name = legend_title,
-#                     labels = legend_labels)
-# 
-# p1 
-# 
-# # Save plot
-# ggsave("figures/nutrition_tools_plot.pdf", p1, width = 19, height = 5, dpi = 600)
-```
 
 ```{r percentage-nutrition-requirements}
 # Data split
@@ -720,39 +631,6 @@ ggsave("figures/nutrition_requirements_plot.pdf", p2, width = 10, height = 5, dp
 ```
 
 
-```{r mcq-nutrient-requirement}
-# Plot using counts
-# # Data split
-# req_split <- nss %>%
-#   separate_rows(nutrition_requirement, sep = ";")
-# 
-# # Split column into multiple rows
-# nutrition_req_frequency <- req_split %>% 
-#   group_by(nutrition_requirement) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# # Create bar chart using ggplot2
-# p2 <- ggplot(nutrition_req_frequency, aes(y = nutrition_requirement, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Methods for estimating nutrition requirement", x = "Respondents", title = "Usual method for estimating nutrition requirement in the ICU") + 
-#    scale_y_discrete(labels=c( 'Body weight-based methods', 'Clinical judgement', "Don't know",  'Published guidelines', "Predictive equations", "Illness severity", "Indirect calorimetry" )) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# p2 
-# 
-# # Save plot
-# ggsave("figures/nutrition_requirements_plot.pdf", p2, width = 10, height = 5, dpi = 600)
-```
 
 ```{r percentage-mcq-en}
 # Data split
@@ -876,122 +754,6 @@ ggsave("figures/feed_tolerance.pdf", p6, width = 10, height = 5, dpi = 600)
 
 
 
-```{r mcq-en}
-# # Plots using counts
-# # Data split
-# commence_en_split <- nss %>%
-#   separate_rows(commence_en, sep = ";")
-# 
-# basis_en_split <- nss %>%
-#   separate_rows(basis_en, sep = ";")
-# 
-# feed_tolerance_split <- nss %>%
-#   separate_rows(feed_tolerance_en, sep = ";")
-# 
-# monitoring_en_split <- nss %>%
-#   separate_rows(methods_monitoring_en, sep = ";")
-# 
-# 
-# # Split column into multiple rows
-# commence_en_frequency <- commence_en_split %>% 
-#   group_by(commence_en) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# basis_en_frequency <- basis_en_split %>% 
-#   group_by(basis_en) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# monitoring_en_frequency <- monitoring_en_split %>% 
-#   group_by(methods_monitoring_en) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# feed_tolerance_frequency <- feed_tolerance_split %>% 
-#   group_by(feed_tolerance_en) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# # Create bar chart using ggplot2
-# 
-# p3 <- ggplot(commence_en_frequency, aes(y = commence_en, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Criteria to commence EN", x = "Respondents", title = "Criteria to commence EN (A)",
-#         caption = "GIT=Gastrointestinal tract, GRV = Gastric residual volume, ICU = Intensive care unit") + 
-#   scale_y_discrete(labels=c( 'First day in the ICU', 'Haemodynamic stability', "Low GRV",  'Low intraabdominal pressure', "Presence of bowel sounds", "Reasonable GIT function", "Reasonable nutrition status", "No response" )) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# 
-# p4 <- ggplot(basis_en_frequency, aes(y = basis_en, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Basis for EN decision", x = "Respondents", title = "Basis for EN decision") + 
-#   scale_y_discrete(labels=c( 'Clinical judgment', 'Not sure', "Professional experience",  'Published guidelines' )) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# 
-# p5 <- ggplot(monitoring_en_frequency, aes(y = methods_monitoring_en, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Monitoring EN", x = "Respondents", title = "Methods for monitoring EN (A)",
-#         caption = "EN = Enteral nutrition") +
-#   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with EN protocols', "Compliance with nutrition goals",  'Compliance with prescribed product', "Compliance with prescribed rate", "Not sure", "No response" )) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# p6 <- ggplot(feed_tolerance_frequency, aes(y = feed_tolerance_en, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Frequency of monitoring feed tolerance", x = "Respondents", title = "Frequency of monitoring feed tolerance",
-#         caption = "EN = Enteral nutrition, ICU = Intensive care unit") + 
-#   scale_y_discrete(labels=c( 'Every 4-6 hours until EN is established', 'Every 4-6 hours throughout ICU stay', "Never", 'No standard', "Once daily", "No response" )) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# p3
-# p4
-# p5
-# p6
-# 
-# # Save plot
-# ggsave("figures/criteria_en.pdf", p3, width = 10, height = 5, dpi = 600)
-# ggsave("figures/basis_en.pdf", p4, width = 10, height = 5, dpi = 600)
-# ggsave("figures/monitoring_en.pdf", p5, width = 10, height = 5, dpi = 600)
-# ggsave("figures/feed_tolerance.pdf", p6, width = 10, height = 5, dpi = 600)
-```
-
 ```{r percentage-mcq-pn}
 # Data split
 commence_pn_split <- nss %>%
@@ -1021,6 +783,7 @@ monitoring_pn_frequency <- mpn_split %>%
 
 # Transform very important response to NA
 monitoring_pn_frequency$monitoring_pn[monitoring_pn_frequency$monitoring_pn == "Very important"] <- NA
+monitoring_pn_frequency$monitoring_pn <- gsub("Compliance with compliance rate", "Compliance with prescribed rate", monitoring_pn_frequency$monitoring_pn)
 
 # Combine to NA values
 monitoring_pn_frequency <- monitoring_pn_frequency%>%
@@ -1062,10 +825,29 @@ total_sum_p7 <- sum(commence_pn_frequency$n)
 total_sum_p8 <- sum(timing_pn_frequency$n)
 total_sum_p9 <- sum(monitoring_pn_frequency$n)
 
+# Reorder the levels of the factor
+timing_pn_frequency$timing_pn <- fct_relevel(timing_pn_frequency$timing_pn, "No response",
+"No standard",
+"Immediately in malnourished patients",
+"As soon as clinically indicated",
+"Within 24 hours of admission",
+"Within 3 days if EN unsuccessful",
+"After 7 days if EN unsuccessful")
+
 # Create plots
 p7 <- create_percentage_plot(commence_pn_frequency, commence_pn_frequency$n, "commence_pn", total_sum_p7, "Criteria to commence PN (B)", c('Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Open abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response"), caption_text = "EN = Enteral nutrition, GIT = Gastrointestinal tract, ICU = Intensive care unit, GRV = Gastric residual volume")
-p8 <- create_percentage_plot(timing_pn_frequency, timing_pn_frequency$n, "timing_pn", total_sum_p8, "Timing of PN", c('After 7 days if EN unsuccessful', 'As soon as clinically indicated', "Immediately in malnourished patients", 'Within 24 hours of admission', "No standard", "Within 3 days if EN unsuccessful", "No response"), caption_text = "EN = Enteral nutrition")
-p9 <- create_percentage_plot(monitoring_pn_frequency, monitoring_pn_frequency$n, "monitoring_pn", total_sum_p9, "Methods for monitoring PN (B)", c('Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with compliance rate", "No response/Null responses"), caption_text = "PN = Parenteral nutrition")
+p8 <- create_percentage_plot(timing_pn_frequency, timing_pn_frequency$n, 
+                             "timing_pn", 
+                             total_sum_p8,
+                             "Timing of PN",
+                              c("No response",
+"No standard",
+"Immediately in malnourished patients",
+"As soon as clinically indicated",
+"Within 24 hours of admission",
+"Within 3 days if EN unsuccessful",
+"After 7 days if EN unsuccessful"), caption_text = "EN = Enteral nutrition")
+p9 <- create_percentage_plot(monitoring_pn_frequency, monitoring_pn_frequency$n, "monitoring_pn", total_sum_p9, "Methods for monitoring PN (B)", c('Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with prescribed rate", "No response/Null responses"), caption_text = "PN = Parenteral nutrition")
 
 # View plots
 p7
@@ -1078,109 +860,6 @@ ggsave("figures/timing_pn.pdf", p8, width = 10, height = 5, dpi = 600)
 ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
 ```
 
-
-```{r mcq-pn}
-# # Plots using counts
-# # Data split
-# commence_pn_split <- nss %>%
-#   separate_rows(commence_pn, sep = ";")
-# 
-# timing_pn_split <- nss %>%
-#   separate_rows(timing_pn, sep = ";")
-# 
-# mpn_split <- nss %>%
-#   separate_rows(monitoring_pn, sep = ";")
-# 
-# # Split column into multiple rows
-# commence_pn_frequency <- commence_pn_split %>% 
-#   group_by(commence_pn) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# timing_pn_frequency <- timing_pn_split %>% 
-#   group_by(timing_pn) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# monitoring_pn_frequency <- mpn_split %>% 
-#   group_by(monitoring_pn) %>%
-#   summarise(n = n ()) %>%
-#   ungroup()
-# 
-# # Transform very important response to NA
-# monitoring_pn_frequency$monitoring_pn[monitoring_pn_frequency$monitoring_pn == "Very important"] <- NA
-# 
-# # Combine to NA values
-# monitoring_pn_frequency <- monitoring_pn_frequency%>%
-#   group_by(monitoring_pn) %>%
-#   summarise(n = sum(n, na.rm = TRUE)) %>%
-#   ungroup() %>%
-#   mutate(monitoring_pn = coalesce(monitoring_pn, "NA")) %>%
-#   group_by(monitoring_pn) %>%
-#   summarise(n = sum(n))
-# 
-# # Create bar chart using ggplot2
-# p7 <- ggplot(commence_pn_frequency, aes(y = commence_pn, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Commence PN", x = "Respondents", title = "Criteria to commence PN (B)",
-#         caption = "EN = Enteral nutrition, GIT = Gastrointestinal tract, ICU = Intensive care unit, GRV = Gastric residual volume") +
-#   scale_y_discrete(labels=c( 'Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Oben abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response" )) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# 
-# p8 <- ggplot(timing_pn_frequency, aes(y = timing_pn, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Timing pn", x = "Respondents", title = "Timing of PN",
-#         caption = "EN = Enteral nutrition") +
-#   scale_y_discrete(labels=c( 'After 7 days if EN unsuccessful', 'As soon as clinically indicated', "Immediately in malnourished patients", 'Within 24 hours of admission', "No standard", "Within 3 days if EN unsuccessful", "No response" )) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# 
-# p9 <- ggplot(monitoring_pn_frequency, aes(y = monitoring_pn, x = n)) +
-#   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-#   geom_text(aes(label = n), nudge_x = 0.5, size = 4) +
-#   labs (y = "Monitoring PN", x = "Respondents", title = "Methods for monitoring PN (B)",
-#         caption = "PN = Parenteral nutrition") +
-#   scale_y_discrete(labels=c( 'Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with compliance rate", "No response/Null responses")) +
-#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank(),
-#         axis.line = element_line(color = "#0072B2"),
-#         axis.text = element_text(color = "black", size = 11),
-#         axis.title = element_text(color = "black", size = 12, face = "bold"),
-#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-#         plot.subtitle = element_text(hjust = 0.5, size = 12),
-#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-# 
-# # Output bar charts
-# 
-# p7 
-# p8
-# p9
-# 
-# # Save plot
-# ggsave("figures/commence_pn.pdf", p7, width = 10, height = 5, dpi = 600)
-# ggsave("figures/timing_pn.pdf", p8, width = 10, height = 5, dpi = 600)
-# ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
-```
 
 
 ```{r combine-four-figures}

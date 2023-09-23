@@ -27,7 +27,8 @@ pacman::p_load(
         ggthemes, # Themes
         questionr, # Multiple choice questions
         patchwork, # Combine plots
-        ggpubr
+        ggpubr,
+        cowplot # Combine multiple figures
 )
 ```
 
@@ -321,20 +322,6 @@ t13
 ## Plots
 
 ```{r nutrition-asessment}
-# Routine screening or nutrition assessment
-# plot_one <- ggplot(data = nutrition_assessment, aes(y = nutrition_assessment)) +
-#   geom_bar(position = "dodge", width = 0.5) +
-#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
-#   labs(title = "Routine practice of nutrition screening or assessment", x="Frequency", y="Screening or assessment") +
-#   scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
-#   facet_wrap(~ profession_doctor_nurse) + 
-#   theme_bw(base_size = 12) + 
-#   theme(panel.grid.major = element_blank(), 
-#         panel.grid.minor = element_blank(),
-#         strip.background = element_blank(),
-#         axis.line = element_line(colour = "black"),
-#         axis.text = element_text(size = 10),
-#         axis.title = element_text(size = 12, face = "bold"))
 
 plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
@@ -352,20 +339,7 @@ plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
         plot.subtitle = element_text(hjust = 0.5, size = 12),
         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
-# Profession who performs the assessment
-# plot_two <- ggplot(data = nutrition_assessment, aes(y = profession_assessment), fill = profession_assessment) +
-#   geom_bar(position = "dodge", width = 0.5) +
-#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.5) + # add frequency count annotation
-#   labs(title = "Professional who performs nutrition screening or assessment", x="Frequency", y="Profession") + 
-#   scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
-#   facet_wrap(~ profession_doctor_nurse) + 
-#   theme_bw(base_size = 12) + 
-#   theme(panel.grid.major = element_blank(), 
-#         panel.grid.minor = element_blank(),
-#         strip.background = element_blank(),
-#         axis.line = element_line(colour = "black"),
-#         axis.text = element_text(size = 10),
-#         axis.title = element_text(size = 12, face = "bold"))
+
 
 plot_two <- ggplot(nutrition_assessment, aes(y = profession_assessment)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
@@ -396,15 +370,6 @@ ggsave("figures/screening_plot.pdf", full_plot, width = 10, height = 5, dpi = 60
 
 
 ```{r nutrition-decision-making}
-# Create plots
-# plot_three <- ggplot(data = decision, aes(nutrition_protocol)) +
-#   geom_bar(position = "dodge", width = 0.5) +
-#   labs(title = "Formal nutrition protocol", x="Nutrition protocol", y="Frequency") +
-#   theme_ggstatsplot() +
-#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-#   facet_wrap(~ profession_doctor_nurse) +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
 plot_three <- ggplot(decision, aes(nutrition_protocol)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
    geom_text(stat='count', aes(label=..count..), nudge_x = 0.2) + # add frequency count annotation
@@ -420,13 +385,7 @@ plot_three <- ggplot(decision, aes(nutrition_protocol)) +
         plot.subtitle = element_text(hjust = 0.5, size = 12),
         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
-# plot_four <- ggplot(data = decision, aes(fluid_volume_decision)) +
-#   geom_bar(position = "dodge", width = 0.5) +
-#   labs(title = "Determination of fluid volume", x="Profession", y="Frequency") +
-#   theme_ggstatsplot() +
-#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-#   facet_wrap(~ profession_doctor_nurse) +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 
 plot_four <- ggplot(decision, aes(fluid_volume_decision)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
@@ -443,13 +402,6 @@ plot_four <- ggplot(decision, aes(fluid_volume_decision)) +
         plot.subtitle = element_text(hjust = 0.5, size = 12),
         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
-# plot_five <- ggplot(data = decision, aes(decide_route)) +
-#   geom_bar(position = "dodge", width = 0.5) +
-#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-#   labs(title = "Route of nutrition support", x="Decision about route", y="Frequency") +
-#   theme_ggstatsplot() +
-#   facet_wrap(~ profession_doctor_nurse) +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 plot_five <- ggplot(decision, aes(decide_route)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
@@ -467,13 +419,7 @@ plot_five <- ggplot(decision, aes(decide_route)) +
         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 
-# plot_six <- ggplot(data = decision, aes(nutrition_support_team)) +
-#   geom_bar(position = "dodge", width = 0.5) +
-#   labs(title = "Formal nutrition support team", x="Response", y="Frequency") +
-#   theme_ggstatsplot() +
-#   geom_text(stat='count', aes(label=..count..), nudge_y = 0.8) + # add frequency count annotation
-#   facet_wrap(~ profession_doctor_nurse) +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 
 plot_six <- ggplot(decision, aes(nutrition_support_team)) +
   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
@@ -492,10 +438,10 @@ plot_six <- ggplot(decision, aes(nutrition_support_team)) +
 
 
 # Flip plots to horizontal
-plot_three <- plot_three + coord_flip() # theme_pubr()
-plot_four <- plot_four + coord_flip() # theme_pubr()
-plot_five <- plot_five + coord_flip() # theme_pubr()
-plot_six <- plot_six + coord_flip() # theme_pubr()
+plot_three <- plot_three + coord_flip() 
+plot_four <- plot_four + coord_flip() 
+plot_five <- plot_five + coord_flip() 
+plot_six <- plot_six + coord_flip() 
 
 # Combine plots and set layout
 combined_plots <- ggarrange(plot_three, plot_four, plot_five, plot_six, ncol = 2, nrow = 2, labels = c("A", "B", "C", "D"), common.legend = TRUE, legend = "bottom")
@@ -850,7 +796,7 @@ combined_plot_monitoring <- combined_plot_monitoring +
   theme(plot.margin = margin(10, 10, 20, 10, "mm"))  # Adjust margins for spacing
 
 
-ggsave("figures/combined_plot_criteria.pdf", combined_plot_citeria, width = 10, height = 5, dpi = 600)
-ggsave("figures/combined_plot_monitoring.pdf", combined_plot_monitoring, width = 10, height = 5, dpi = 600)
+ggsave("figures/combined_plot_criteria.pdf", combined_plot_criteria, width = 10, height = 7, dpi = 600)
+ggsave("figures/combined_plot_monitoring.pdf", combined_plot_monitoring, width = 10, height = 7, dpi = 600)
 ```
 

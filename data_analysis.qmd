@@ -571,8 +571,7 @@ ggplot(data = skills, aes(source_info)) +
 
 ## Multiple choice questions
 
-
-```{r mcq-nutrition-tools}
+```{r}
 # Data split
 tools_split <- nss %>%
   separate_rows(nutrition_tools, sep = ";")
@@ -583,14 +582,22 @@ nutrition_tools_frequency <- tools_split %>%
   summarise(n = n ()) %>%
   ungroup()
 
-# Create bar chart using ggplot2
-p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
+# Calculate total respondents
+total_respondents <- sum(nutrition_tools_frequency$n)
+
+# Create a new data frame with the percentage column
+nutrition_tools_percentage <- nutrition_tools_frequency %>%
+  mutate(percentage = (n / total_respondents) * 100)
+
+# Create the plot
+p1 <- ggplot(nutrition_tools_percentage, aes(y = nutrition_tools, x = percentage)) +
   geom_bar(stat = "identity", fill = "#0072B2") +
-  labs(y = "Nutrition screening or assessment tools", x = "Respondents", 
+  geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.7, size = 4) +
+  labs(y = "Nutrition screening or assessment tools", x = "Percentage of Respondents", 
        title = "Nutrition screening or assessment methods used in the ICU",
        caption = "SGA=Subjective Global Assessment, NRS2002 = Nutrition risk screening, NUTRIC = Nutrition risk in critically ill, MUST = Malnutrition universal screening tool, ABCDE = Combination of anthropometry, biochemical, clinical, dietary and environmental assessment, BMI = Body mass index") +
-  geom_text(aes(label = n), nudge_x = 0.7, size = 4) +
-  scale_y_discrete(labels=c( "BMI/Body weight assessment", "ABCDE approach", "Don't know",'MUST', 'NUTRIC', 'NRS2002', 'SGA')) +
+  scale_x_continuous(labels = scales::percent_format(scale = 1), expand = expansion(mult = c(0, .1))) +
+  scale_y_discrete(labels=c("BMI/Body weight assessment", "ABCDE approach", "Don't know", 'MUST', 'NUTRIC', 'NRS2002', 'SGA')) +
   theme_bw(base_size = 12) +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
@@ -600,8 +607,8 @@ p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
         axis.title = element_text(color = "black", size = 12, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-        theme(plot.margin = unit(c(1, 5, 1, 5), "lines")) # adjust the margin to increase the width of the plotting area
+        plot.caption = element_text(hjust = 1, size = 10, color = "black")) +
+  theme(plot.margin = unit(c(1, 5, 1, 5), "lines"))  # adjust the margin to increase the width of the plotting area
 
 # Customize the legend
 legend_title <- "Frequency"
@@ -618,6 +625,56 @@ p1
 
 # Save plot
 ggsave("figures/nutrition_tools_plot.pdf", p1, width = 19, height = 5, dpi = 600)
+```
+
+
+```{r mcq-nutrition-tools}
+# # Plot using counts
+# # Data split
+# tools_split <- nss %>%
+#   separate_rows(nutrition_tools, sep = ";")
+# 
+# # Split column into multiple rows
+# nutrition_tools_frequency <- tools_split %>% 
+#   group_by(nutrition_tools) %>%
+#   summarise(n = n ()) %>%
+#   ungroup()
+# 
+# # Create bar chart using ggplot2
+# p1 <- ggplot(nutrition_tools_frequency, aes(y = nutrition_tools, x = n)) +
+#   geom_bar(stat = "identity", fill = "#0072B2") +
+#   labs(y = "Nutrition screening or assessment tools", x = "Respondents", 
+#        title = "Nutrition screening or assessment methods used in the ICU",
+#        caption = "SGA=Subjective Global Assessment, NRS2002 = Nutrition risk screening, NUTRIC = Nutrition risk in critically ill, MUST = Malnutrition universal screening tool, ABCDE = Combination of anthropometry, biochemical, clinical, dietary and environmental assessment, BMI = Body mass index") +
+#   geom_text(aes(label = n), nudge_x = 0.7, size = 4) +
+#   scale_y_discrete(labels=c( "BMI/Body weight assessment", "ABCDE approach", "Don't know",'MUST', 'NUTRIC', 'NRS2002', 'SGA')) +
+#   theme_bw(base_size = 12) +
+#   theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         panel.border = element_blank(),
+#         axis.line = element_line(color = "#0072B2"),
+#         axis.text = element_text(color = "black", size = 11),
+#         axis.title = element_text(color = "black", size = 12, face = "bold"),
+#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+#         plot.subtitle = element_text(hjust = 0.5, size = 12),
+#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
+#         theme(plot.margin = unit(c(1, 5, 1, 5), "lines")) # adjust the margin to increase the width of the plotting area
+# 
+# # Customize the legend
+# legend_title <- "Frequency"
+# legend_labels <- c("Nutrition screening or assessment tools")
+# p1 <- p1 + theme(legend.position = "bottom",
+#                   legend.text = element_text(size = 11),
+#                   legend.title = element_text(size = 12, face = "bold"),
+#                   legend.key.size = unit(1.5, "lines")) +
+#   scale_fill_manual(values = "black",
+#                     name = legend_title,
+#                     labels = legend_labels)
+# 
+# p1 
+# 
+# # Save plot
+# ggsave("figures/nutrition_tools_plot.pdf", p1, width = 19, height = 5, dpi = 600)
 ```
 
 

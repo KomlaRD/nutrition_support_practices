@@ -327,41 +327,86 @@ nutrition_assessment$nutrition_assessment <- fct_explicit_na(nutrition_assessmen
 ```
 
 
+```{r}
+
+
+# Assuming `nutrition_assessment` is the name of the column you're interested in,
+# and `profession_doctor_nurse` is the grouping variable
+
+# Calculate the total count for each group
+total_counts <- nutrition_assessment %>%
+  group_by(profession_doctor_nurse, nutrition_assessment) %>%
+  summarise(count = n()) %>%
+  ungroup()
+
+# Calculate the overall total for each profession_doctor_nurse group
+overall_totals <- total_counts %>%
+  group_by(profession_doctor_nurse) %>%
+  summarise(overall_total = sum(count)) %>%
+  ungroup()
+
+# Merge the two data frames together
+nutrition_assessment_percentage <- merge(total_counts, overall_totals)
+
+# Calculate the percentage
+nutrition_assessment_percentage$percentage <- (nutrition_assessment_percentage$count / nutrition_assessment_percentage$overall_total) * 100
+
+plot_one <- ggplot(nutrition_assessment_percentage, aes(y = nutrition_assessment, x = percentage)) +
+  geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.2) +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)), vjust = 1.5, nudge_y = 0.25) +
+  labs(title = "Routine practice of nutrition screening or assessment", y = "Screening or assessment", x = "Respondents") +
+  scale_x_continuous(labels = scales::percent_format(scale = 1), expand = expansion(mult = c(0, .1))) +
+  facet_wrap(~ profession_doctor_nurse, scales = "free_y") +
+  theme_pubclean() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "#0072B2"),
+        axis.text = element_text(color = "black", size = 11),
+        axis.title = element_text(color = "black", size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 12),
+        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
+
+plot_one
+```
+
+
 ```{r nutrition-asessment}
-
-plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
-  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
-   geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
-  labs(title = "Routine practice of nutrition screening or assessment", x="Respondents", y="Screening or assessment") +
-  scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
-  facet_wrap(~ profession_doctor_nurse) +
-  theme_pubclean() +  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        axis.line = element_line(color = "#0072B2"),
-        axis.text = element_text(color = "black", size = 11),
-        axis.title = element_text(color = "black", size = 12, face = "bold"),
-        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-        plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
-
-
-
-plot_two <- ggplot(nutrition_assessment, aes(y = profession_assessment)) +
-  geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
-   geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
-  labs(title = "Professional who performs nutrition screening or assessment", x="Respondents", y="Profession") + 
-  scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
-  facet_wrap(~ profession_doctor_nurse) + 
-  theme_pubclean() +  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        axis.line = element_line(color = "#0072B2"),
-        axis.text = element_text(color = "black", size = 11),
-        axis.title = element_text(color = "black", size = 12, face = "bold"),
-        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-        plot.subtitle = element_text(hjust = 0.5, size = 12),
-        plot.caption = element_text(hjust = 1, size = 10, color = "black"))
+# Plots using counts
+# plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +
+#   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+#    geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
+#   labs(title = "Routine practice of nutrition screening or assessment", x="Respondents", y="Screening or assessment") +
+#   scale_y_discrete(labels=c('No', 'Yes', 'No response')) +
+#   facet_wrap(~ profession_doctor_nurse) +
+#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         panel.border = element_blank(),
+#         axis.line = element_line(color = "#0072B2"),
+#         axis.text = element_text(color = "black", size = 11),
+#         axis.title = element_text(color = "black", size = 12, face = "bold"),
+#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+#         plot.subtitle = element_text(hjust = 0.5, size = 12),
+#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
+# 
+# 
+# 
+# plot_two <- ggplot(nutrition_assessment, aes(y = profession_assessment)) +
+#   geom_bar(fill = "#0072B2", color = "#0072B2", width = 0.2) +
+#    geom_text(stat='count', aes(label=..count..), nudge_x = 0.7) + # add frequency count annotation
+#   labs(title = "Professional who performs nutrition screening or assessment", x="Respondents", y="Profession") + 
+#   scale_y_discrete(labels=c('Dietitian', 'Medical doctor', 'Critical care nurse', 'No response')) +
+#   facet_wrap(~ profession_doctor_nurse) + 
+#   theme_pubclean() +  theme(panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         panel.border = element_blank(),
+#         axis.line = element_line(color = "#0072B2"),
+#         axis.text = element_text(color = "black", size = 11),
+#         axis.title = element_text(color = "black", size = 12, face = "bold"),
+#         plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+#         plot.subtitle = element_text(hjust = 0.5, size = 12),
+#         plot.caption = element_text(hjust = 1, size = 10, color = "black"))
 
 # Output plots
 plot_one 

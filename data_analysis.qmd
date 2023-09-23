@@ -321,6 +321,12 @@ t13
 
 ## Plots
 
+```{r replace-na-to-no-response}
+# Replace NA with "No response"
+nutrition_assessment$nutrition_assessment <- fct_explicit_na(nutrition_assessment$nutrition_assessment, "No response")
+```
+
+
 ```{r nutrition-asessment}
 
 plot_one <- ggplot(nutrition_assessment, aes(y = nutrition_assessment)) +

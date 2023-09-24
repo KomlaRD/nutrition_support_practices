@@ -661,15 +661,15 @@ monitoring_pn_frequency <- monitoring_pn_frequency%>%
 ```
 
 
-```{r commence-monitor-pn}
+```{r commence-pn}
 # Create a function to compute percentage and create a plot
 create_percentage_plot <- function(df, x_var, y_var, total_sum, title, y_labels, x_label = "Respondents", caption_text) {
   df_percentage <- df %>% mutate(percentage = (x_var / total_sum) * 100)
   
   p <- ggplot(df_percentage, aes_string(y = y_var, x = "percentage")) +
     geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-    geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.9, nudge_y = 0.2, size = 4) +
-    labs(y = title, x = x_label, title = title, caption = caption_text) +
+    geom_text(aes(label = sprintf("%.1f%%", percentage)), hjust=-0.3) +
+    labs(y = "Criteria to commence PN", x = x_label, title = title, caption = caption_text) +
     scale_x_continuous(labels = scales::percent_format(scale = 1), expand = expansion(mult = c(0, .1))) +
     scale_y_discrete(labels = y_labels) +
     theme_pubclean() +
@@ -689,25 +689,54 @@ create_percentage_plot <- function(df, x_var, y_var, total_sum, title, y_labels,
 
 # Define the total sum for each data frame
 total_sum_p7 <- sum(commence_pn_frequency$n)
-total_sum_p9 <- sum(monitoring_pn_frequency$n)
-
 
 
 # Create plots
 p7 <- create_percentage_plot(commence_pn_frequency, commence_pn_frequency$n, "commence_pn", total_sum_p7, "Criteria to commence PN (B)", c('Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Open abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response"), caption_text = "EN = Enteral nutrition, GIT = Gastrointestinal tract, ICU = Intensive care unit, GRV = Gastric residual volume")
 
-
-p9 <- create_percentage_plot(monitoring_pn_frequency, monitoring_pn_frequency$n, "monitoring_pn", total_sum_p9, "Methods for monitoring PN (B)", c('Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with prescribed rate", "No response/Null responses"), caption_text = "PN = Parenteral nutrition")
-
 # View plots
 p7
-p9
 
 # Save plot
 ggsave("figures/commence_pn.pdf", p7, width = 10, height = 5, dpi = 600)
-ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
 ```
 
+
+```{r monitoring-pn}
+# Create a function to compute percentage and create a plot
+create_percentage_plot <- function(df, x_var, y_var, total_sum, title, y_labels, x_label = "Respondents", caption_text) {
+  df_percentage <- df %>% mutate(percentage = (x_var / total_sum) * 100)
+  
+  p <- ggplot(df_percentage, aes_string(y = y_var, x = "percentage")) +
+    geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
+    geom_text(aes(label = sprintf("%.1f%%", percentage)), hjust=-0.3) +
+    labs(y = "Monitoring PN", x = x_label, title = title, caption = caption_text) +
+    scale_x_continuous(labels = scales::percent_format(scale = 1), expand = expansion(mult = c(0, .1))) +
+    scale_y_discrete(labels = y_labels) +
+    theme_pubclean() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_line(color = "#0072B2"),
+      axis.text = element_text(color = "black", size = 11),
+      axis.title = element_text(color = "black", size = 12, face = "bold"),
+      plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+      plot.subtitle = element_text(hjust = 0.5, size = 12),
+      plot.caption = element_text(hjust = 1, size = 10, color = "black")
+    )
+  return(p)
+}
+
+total_sum_p9 <- sum(monitoring_pn_frequency$n)
+
+p9 <- create_percentage_plot(monitoring_pn_frequency, monitoring_pn_frequency$n, "monitoring_pn", total_sum_p9, "Methods for monitoring PN (B)", c('Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with prescribed rate", "No response/Null responses"), caption_text = "PN = Parenteral nutrition")
+
+# View plot
+p9
+
+ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
+```
 
 ```{r timing-pn}
 # Load the data

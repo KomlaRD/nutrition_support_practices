@@ -503,7 +503,7 @@ nutrition_req_percentage <- nutrition_req_frequency %>%
 # Create the plot
 p2 <- ggplot(nutrition_req_percentage, aes(y = nutrition_requirement, x = percentage)) +
   geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-  geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.7, size = 4) +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.9, nudge_y = 0.2, size = 4) +
   labs(y = "Methods for estimating nutrition requirement", x = "Respondents", title = "Usual method for estimating nutrition requirement in the ICU") +
   scale_x_continuous(labels = scales::percent_format(scale = 1), expand = expansion(mult = c(0, .1))) +
   scale_y_discrete(labels=c( 'Body weight-based methods', 'Clinical judgement', "Don't know",  'Published guidelines', "Predictive equations", "Illness severity", "Indirect calorimetry" )) +
@@ -531,11 +531,6 @@ ggsave("figures/nutrition_requirements_plot.pdf", p2, width = 10, height = 5, dp
 commence_en_split <- nss %>%
   separate_rows(commence_en, sep = ";")
 
-basis_en_split <- nss %>%
-  separate_rows(basis_en, sep = ";")
-
-feed_tolerance_split <- nss %>%
-  separate_rows(feed_tolerance_en, sep = ";")
 
 monitoring_en_split <- nss %>%
   separate_rows(methods_monitoring_en, sep = ";")
@@ -547,20 +542,12 @@ commence_en_frequency <- commence_en_split %>%
   summarise(n = n ()) %>%
   ungroup()
 
-basis_en_frequency <- basis_en_split %>% 
-  group_by(basis_en) %>%
-  summarise(n = n ()) %>%
-  ungroup()
 
 monitoring_en_frequency <- monitoring_en_split %>% 
   group_by(methods_monitoring_en) %>%
   summarise(n = n ()) %>%
   ungroup()
 
-feed_tolerance_frequency <- feed_tolerance_split %>% 
-  group_by(feed_tolerance_en) %>%
-  summarise(n = n ()) %>%
-  ungroup()
 
 
 # Define the function to generate plots with percentages
@@ -605,15 +592,9 @@ p3 <- generate_percentage_plot(
   'GIT=Gastrointestinal tract, GRV = Gastric residual volume, ICU = Intensive care unit'
 )
 
-p4 <- generate_percentage_plot(
-  basis_en_frequency,
-  'basis_en',
-  'n',
-  'Basis for EN decision',
-  c('Clinical judgment', 'Not sure', "Professional experience",  'Published guidelines')
-)
 
-p5 <- generate_percentage_plot(
+
+p4 <- generate_percentage_plot(
   monitoring_en_frequency,
   'methods_monitoring_en',
   'n',
@@ -623,27 +604,16 @@ p5 <- generate_percentage_plot(
   'EN = Enteral nutrition'
 )
 
-p6 <- generate_percentage_plot(
-  feed_tolerance_frequency,
-  'feed_tolerance_en',
-  'n',
-  'Frequency of monitoring feed tolerance',
-  c('Every 4-6 hours until EN is established', 'Every 4-6 hours throughout ICU stay', "Never",
-    'No standard', "Once daily", "No response"),
-  'EN = Enteral nutrition, ICU = Intensive care unit'
-)
+
 
 # View plots
 p3
 p4
-p5
-p6
+
 
 # Save plot
 ggsave("figures/criteria_en.pdf", p3, width = 10, height = 5, dpi = 600)
-ggsave("figures/basis_en.pdf", p4, width = 10, height = 5, dpi = 600)
-ggsave("figures/monitoring_en.pdf", p5, width = 10, height = 5, dpi = 600)
-ggsave("figures/feed_tolerance.pdf", p6, width = 10, height = 5, dpi = 600)
+ggsave("figures/monitoring_en.pdf", p4, width = 10, height = 5, dpi = 600)
 ```
 
 

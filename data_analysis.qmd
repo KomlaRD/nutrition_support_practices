@@ -549,7 +549,6 @@ monitoring_en_frequency <- monitoring_en_split %>%
   ungroup()
 
 
-
 # Define the function to generate plots with percentages
 generate_percentage_plot <- function(data, y_col, x_col, title, y_labels, caption = NULL) {
   # Calculate the total count
@@ -561,7 +560,7 @@ generate_percentage_plot <- function(data, y_col, x_col, title, y_labels, captio
   # Create the plot
   p <- ggplot(data, aes_string(y = y_col, x = "percentage")) +  # Use 'percentage' instead of 'n'
     geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-    geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.7, size = 4) +  # Label with formatted percentage
+    geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.9, nudge_y = 0.2, size = 4) +  # Label with formatted percentage
     labs(y = y_col, x = "Respondents", title = title, caption = caption) + 
     scale_y_discrete(labels = y_labels) +
     theme_pubclean() +  
@@ -645,9 +644,6 @@ monitoring_pn_frequency <- mpn_split %>%
   summarise(n = n ()) %>%
   ungroup()
 
-# Import reordered timing PN
-timing_pn_frequency <- import(here("data","reordered_timing_pn.csv"))
-
 
 # Transform very important response to NA
 monitoring_pn_frequency$monitoring_pn[monitoring_pn_frequency$monitoring_pn == "Very important"] <- NA
@@ -662,14 +658,17 @@ monitoring_pn_frequency <- monitoring_pn_frequency%>%
   group_by(monitoring_pn) %>%
   summarise(n = sum(n))
 
+```
 
+
+```{r commence-monitor-pn}
 # Create a function to compute percentage and create a plot
 create_percentage_plot <- function(df, x_var, y_var, total_sum, title, y_labels, x_label = "Respondents", caption_text) {
   df_percentage <- df %>% mutate(percentage = (x_var / total_sum) * 100)
   
   p <- ggplot(df_percentage, aes_string(y = y_var, x = "percentage")) +
     geom_bar(stat = "identity", fill = "#0072B2", color = "#0072B2", width = 0.6) +
-    geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.7, size = 4) +
+    geom_text(aes(label = sprintf("%.1f%%", percentage)), nudge_x = 0.9, nudge_y = 0.2, size = 4) +
     labs(y = title, x = x_label, title = title, caption = caption_text) +
     scale_x_continuous(labels = scales::percent_format(scale = 1), expand = expansion(mult = c(0, .1))) +
     scale_y_discrete(labels = y_labels) +
@@ -690,37 +689,72 @@ create_percentage_plot <- function(df, x_var, y_var, total_sum, title, y_labels,
 
 # Define the total sum for each data frame
 total_sum_p7 <- sum(commence_pn_frequency$n)
-total_sum_p8 <- sum(timing_pn_frequency$n)
 total_sum_p9 <- sum(monitoring_pn_frequency$n)
 
 
 
 # Create plots
 p7 <- create_percentage_plot(commence_pn_frequency, commence_pn_frequency$n, "commence_pn", total_sum_p7, "Criteria to commence PN (B)", c('Any GIT surgery', 'Excessive GRV', "First day of ICU", 'GIT failure, ileus or obstruction', "High output fistula or stoma", "Open abdomen", "Poor nutrition status", "Presence of GIT symptoms of intolerance", "Unsuccessful EN", "No response"), caption_text = "EN = Enteral nutrition, GIT = Gastrointestinal tract, ICU = Intensive care unit, GRV = Gastric residual volume")
-p8 <- create_percentage_plot(timing_pn_frequency, timing_pn_frequency$n, 
-                             "timing_pn", 
-                             total_sum_p8,
-                             "Timing of PN",
-                              c("No response",
-"No standard",
-"Immediately in malnourished patients",
-"As soon as clinically indicated",
-"Within 24 hours of admission",
-"Within 3 days if EN unsuccessful",
-"After 7 days if EN unsuccessful"), caption_text = "EN = Enteral nutrition")
+
+
 p9 <- create_percentage_plot(monitoring_pn_frequency, monitoring_pn_frequency$n, "monitoring_pn", total_sum_p9, "Methods for monitoring PN (B)", c('Clinical signs/symptoms of intolerance', 'Compliance with nutrition goals', "Compliance with PN protocol", 'Compliance with prescribed product', "Compliance with prescribed rate", "No response/Null responses"), caption_text = "PN = Parenteral nutrition")
 
 # View plots
 p7
-p8
 p9
 
 # Save plot
 ggsave("figures/commence_pn.pdf", p7, width = 10, height = 5, dpi = 600)
-ggsave("figures/timing_pn.pdf", p8, width = 10, height = 5, dpi = 600)
 ggsave("figures/monitoring_pn.pdf", p9, width = 10, height = 5, dpi = 600)
 ```
 
+
+```{r timing-pn}
+# Load the data
+timing_pn <- read.csv('data/reordered_timing_pn.csv')
+
+# Set the order of factors
+timing_pn$timing_pn <- factor(timing_pn$timing_pn, levels = c(
+  "No response",
+  "No standard",
+  "As soon as a clinical indication becomes apparent",
+  "Immediately in malnourished patients",
+  "Mainly within 24 hours of ICU admission",
+  "Within 3 days if enteral feeding unsuccessful",
+  "After 7 days if enteral feeding unsuccessful"
+))
+
+# Calculate the total sum
+total_sum <- sum(timing_pn$n)
+
+# Create a new column for percentage
+timing_pn$percentage <- (timing_pn$n / total_sum) * 100
+
+# Create the bar chart
+p8 <- ggplot(timing_pn, aes(x = timing_pn, y = percentage)) +
+  geom_bar(stat='identity' ,fill = "#0072B2", color = "#0072B2", width = 0.6) +
+  geom_text(aes(label=sprintf("%.1f%%", percentage)), hjust=-0.3) +
+  labs(y = "Respondents", x = "Timing of PN", title = "Timing of PN", caption = "EN = Enteral Nutrition") +
+  theme_pubclean() +
+  theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_line(color = "#0072B2"),
+      axis.text = element_text(color = "black", size = 11),
+      axis.title = element_text(color = "black", size = 12, face = "bold"),
+      plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+      plot.subtitle = element_text(hjust = 0.5, size = 12),
+      plot.caption = element_text(hjust = 1, size = 10, color = "black")) + 
+  coord_flip()
+   # This flips the axes to match the orientation of the original chart
+
+# View plot
+p8
+
+# Save plot
+ggsave("figures/timing_pn.pdf", p8, width = 10, height = 5, dpi = 600)
+```
 
 
 ```{r combine-four-figures}

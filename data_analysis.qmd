@@ -731,9 +731,6 @@ ggsave("figures/commence_pn.pdf", p7, width = 10, height = 5, dpi = 600)
 
 
 ```{r monitoring-pn}
-# # Import reordered monitoring dataset
-monitoring_pn_frequency <- import(here("data","reordered_monitoring_pn.csv"))
-
 # Create a function to compute percentage and create a plot
 create_percentage_plot <- function(df, x_var, y_var, total_sum, title, y_labels, x_label = "Respondents", caption_text) {
   df_percentage <- df %>% mutate(percentage = (x_var / total_sum) * 100)
@@ -835,7 +832,7 @@ combined_plot_monitoring <- combined_plot_monitoring +
   theme(plot.margin = margin(10, 10, 20, 10, "mm"))  # Adjust margins for spacing
 
 
-ggsave("figures/combined_plot_criteria.pdf", combined_plot_criteria, width = 10, height = 7, dpi = 600)
-ggsave("figures/combined_plot_monitoring.pdf", combined_plot_monitoring, width = 10, height = 7, dpi = 600)
+ggsave("figures/combined_plot_criteria.pdf", combined_plot_criteria, width = 14, height = 7, dpi = 600)
+ggsave("figures/combined_plot_monitoring.pdf", combined_plot_monitoring, width = 14, height = 7, dpi = 600)
 ```
 

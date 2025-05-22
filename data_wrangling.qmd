@@ -21,7 +21,7 @@ pacman::p_load(
         skimr, # Skim daataset
         psych, # Describe dataset
         lessR, # Multiple plots and statistical tests
-        forcats, # Working with factors 
+        forcats # Working with factors 
 )
 ```
 
